@@ -1,0 +1,446 @@
+<!--
+<define name="sim_dir_name" value="Excercise2"/>
+<define name="simbase_dir" value="/Users/christianschmidt/Uni/tSPECT/Simulation/Internship_Guilbaud"/>
+-->
+<!--define name="cache_dir" value="[simbase_dir]/KEMFieldCache"/-->
+<!--
+<external_define name="output_dir" value="[simbase_dir]/[sim_dir_name]/output"/>
+<external_define name="input_dir" value="[simbase_dir]/[sim_dir_name]/input"/>
+-->
+<!--define name="geometry_dir" value="[simbase_dir]/tSPECTGeometry"/-->
+
+<!--
+<define name="output_path" value="[output_dir]"/>
+<define name="log_path" value="[output_dir]"/>
+<define name="input_path" value="[input_dir]"/>
+-->
+
+<!--
+Created the 8. June 2020
+Author: Thomas Guilbaud
+-->
+
+<define name="output_path" value="[KASPERSYS]/../../Stage 2A - UCN - 2020/Simulation/output/Beamline"/>
+<define name="log_path" value="[KASPERSYS]/../../Stage 2A - UCN - 2020/Simulation/log/Beamline"/>
+<define name="input_path" value="[KASPERSYS]/../../Stage 2A - UCN - 2020/Simulation/config/Beamline"/>
+
+
+<messages>
+    <file path="[log_path]" base="Beamline_log.txt"/>
+
+    <message key="k_file" terminal="normal" log="warning"/>
+    <message key="k_initialization" terminal="normal" log="warning"/>
+
+    <message key="kg_core" terminal="normal" log="warning"/>
+    <message key="kg_shape" terminal="normal" log="warning"/>
+    <message key="kg_mesh" terminal="normal" log="warning"/>
+    <message key="kg_axial_mesh" terminal="normal" log="warning"/>
+
+    <message key="ks_object" terminal="normal" log="normal"/>
+    <message key="ks_operator" terminal="normal" log="normal"/>
+    <message key="ks_field" terminal="normal" log="normal"/>
+    <message key="ks_geometry" terminal="normal" log="normal"/>
+    <message key="ks_generator" terminal="normal" log="normal"/>
+    <message key="ks_trajectory" terminal="debug" log="normal"/>
+    <message key="ks_interaction" terminal="debug" log="normal"/>
+    <message key="ks_navigator" terminal="debug" log="normal"/>
+    <message key="ks_terminator" terminal="normal" log="normal"/>
+    <message key="ks_writer" terminal="normal" log="normal"/>
+    <message key="ks_main" terminal="normal" log="normal"/>
+    <message key="ks_run" terminal="normal" log="normal"/>
+    <message key="ks_event" terminal="normal" log="normal"/>
+    <message key="ks_track" terminal="normal" log="normal"/>
+    <message key="ks_step" terminal="debug" log="normal"/>
+</messages>
+
+<geometry>
+  <!-- Major Parameters -->
+  <define name="inner_diameter" value="66.e-3"/> <!-- Inner diameter of the tubes = 66 mm -->
+  <define name="outer_diameter" value="70.e-3"/> <!-- Outer diameter of the tubes = 70 mm -->
+
+  <define name="bend1_radii" value="25.e-2"/> <!-- Bend radii of the bend1 shape = 25 cm -->
+  <define name="bend2_radii" value="40.e-2"/> <!-- Bend radii of the bend2 shape = 40 cm -->
+  <define name="bend3_radii" value="8.e-2"/> <!-- Bend radii of the bend3 shape = 8 cm -->
+
+  <define name="bend1_angle" value="45."/> <!-- Bend angle of the bend1 shape = 45°-->
+  <define name="bend2_angle" value="45."/> <!--Bend angle of the bend2 shape = 45° -->
+  <define name="bend3_angle" value="90."/> <!--Bend angle of the bend3 shape = 90° -->
+
+  <define name="tube1_length" value="70.e-2"/> <!--Length of the tube1 cylinder = 70 cm -->
+  <define name="tube2_length" value="28.e-2"/> <!--Length of the tube2 cylinder = 28 cm -->
+  <define name="tube3_length" value="44.e-2"/> <!--Length of the tube3 cylinder = 44 cm -->
+  <define name="tube4_length" value="32.e-2"/> <!--Length of the tube4 cylinder = 32 cm -->
+
+  <!-- Coordinnates -->
+  <define name="P1x" value="{[bend1_radii]*TMath::Sin([bend1_angle]*TMath::Pi()/180)}"/>
+  <define name="P1y" value="{-[bend1_radii]*TMath::Cos([bend1_angle]*TMath::Pi()/180)+[bend1_radii]}"/>
+  <define name="P2x" value="{[tube1_length]*TMath::Cos([bend1_angle]*TMath::Pi()/180)+[P1x]}"/>
+  <define name="P2y" value="{[tube1_length]*TMath::Sin([bend1_angle]*TMath::Pi()/180)+[P1y]}"/>
+  <define name="P3x" value="{[tube2_length]*TMath::Cos([bend1_angle]*TMath::Pi()/180)+[P2x]}"/>
+  <define name="P3y" value="{[tube2_length]*TMath::Sin([bend1_angle]*TMath::Pi()/180)+[bend2_radii]+[P2y]}"/>
+  <define name="P4x" value="{-[bend2_radii]*TMath::Sin([bend1_angle]*TMath::Pi()/180)+[P3x]}"/>
+  <define name="P4y" value="{[bend2_radii]*TMath::Cos([bend1_angle]*TMath::Pi()/180)-[bend2_radii]+[P3y]}"/>
+  <define name="P5x" value="{[bend2_radii]*TMath::Sin(([bend1_angle]+[bend2_angle])*TMath::Pi()/180)+[P4x]}"/>
+  <define name="P5y" value="{-[bend2_radii]*TMath::Cos(([bend1_angle]+[bend2_angle])*TMath::Pi()/180)+[P4y]}"/>
+  <define name="P6x" value="{[tube3_length]*TMath::Cos(([bend1_angle]+[bend2_angle])*TMath::Pi()/180)+[P5x]}"/>
+  <define name="P6y" value="{[tube3_length]*TMath::Sin(([bend1_angle]+[bend2_angle])*TMath::Pi()/180)+[P5y]}"/>
+  <define name="P7x" value="{[bend3_radii]*TMath::Sin(([bend1_angle]+[bend2_angle])*TMath::Pi()/180)+[P6x]}"/>
+  <define name="P7y" value="{-[bend3_radii]*TMath::Cos(([bend1_angle]+[bend2_angle])*TMath::Pi()/180)+[P6y]}"/>
+  <define name="P8x" value="{[bend3_radii]*TMath::Sin(([bend3_angle]-[bend1_angle]-[bend2_angle])*TMath::Pi()/180)+[P7x]}"/>
+  <define name="P8y" value="{[bend3_radii]*TMath::Cos(([bend3_angle]-[bend1_angle]-[bend2_angle])*TMath::Pi()/180)+[P7y]}"/>
+
+
+  <!-- World --> <!-- Needs to be more skinny -->
+  <!--cylinder_space name="world_space" z1="{-[outer_diameter]*1.01}" z2="1.7" r="2."/-->
+  <box_space name="world_space" xa="-0.01" ya="-0.1" za="{-[outer_diameter]*1.01}" xb="1.5" yb="0.1" zb="1.7"/>
+
+
+  <!-- Bend part -->
+  <tag name="annulus_tag">
+    <annulus_surface name="annulus_surface" z="0." r1="{[inner_diameter]/2}" r2="{[outer_diameter]/2}"
+      radial_mesh_count="22" radial_mesh_power="1.5" axial_mesh_count="32"/>
+  </tag>
+
+  <tag name="inner_bend_tag">
+    <shell_circle_surface name="inner_shell_circle_1_surface" angle_start="0" angle_stop="[bend1_angle]" shell_mesh_count="32" shell_mesh_power="6">
+      <circle x="0." y="[bend1_radii]" radius="{[inner_diameter]/2}" circle_mesh_count="32"/>
+    </shell_circle_surface>
+    <shell_circle_surface name="inner_shell_circle_2_surface" angle_start="0" angle_stop="[bend2_angle]" shell_mesh_count="32" shell_mesh_power="6">
+      <circle x="0." y="[bend2_radii]" radius="{[inner_diameter]/2}" circle_mesh_count="32"/>
+    </shell_circle_surface>
+    <shell_circle_surface name="inner_shell_circle_3_surface" angle_start="0" angle_stop="[bend3_angle]" shell_mesh_count="32" shell_mesh_power="6">
+      <circle x="0." y="[bend3_radii]" radius="{[inner_diameter]/2}" circle_mesh_count="32"/>
+    </shell_circle_surface>
+  </tag>
+
+  <tag name="outer_bend_tag">
+    <shell_circle_surface name="outer_shell_circle_1_surface" angle_start="0" angle_stop="[bend1_angle]" shell_mesh_count="32" shell_mesh_power="6">
+      <circle x="0." y="[bend1_radii]" radius="{[outer_diameter]/2}" circle_mesh_count="32"/>
+    </shell_circle_surface>
+    <shell_circle_surface name="outer_shell_circle_2_surface" angle_start="0" angle_stop="[bend2_angle]" shell_mesh_count="32" shell_mesh_power="6">
+      <circle x="0." y="[bend2_radii]" radius="{[outer_diameter]/2}" circle_mesh_count="32"/>
+    </shell_circle_surface>
+    <shell_circle_surface name="outer_shell_circle_3_surface" angle_start="0" angle_stop="[bend3_angle]" shell_mesh_count="32" shell_mesh_power="6">
+      <circle x="0." y="[bend3_radii]" radius="{[outer_diameter]/2}" circle_mesh_count="32"/>
+    </shell_circle_surface>
+  </tag>
+
+  <!-- Bend 1 Cylinder Assembly -->
+  <space name="bend1_space_assembly">
+    <surface name="inner_shell_1" node="inner_shell_circle_1_surface">
+      <transformation displacement="0. 0. 0."/>
+    </surface>
+    <surface name="outer_shell_1" node="outer_shell_circle_1_surface">
+      <transformation displacement="0. 0. 0."/>
+    </surface>
+    <surface name="entry_annulus_1" node="annulus_surface">
+      <transformation rotation_euler="0. 90. 0."
+                      displacement="[bend1_radii] 0. 0."/>
+    </surface>
+    <surface name="exit_annulus_1" node="annulus_surface">
+      <transformation rotation_euler="[bend1_angle] 90. 0."
+                      displacement="{[bend1_radii]*TMath::Cos([bend1_angle]*TMath::Pi()/180)}
+                                    {[bend1_radii]*TMath::Sin([bend1_angle]*TMath::Pi()/180)}
+                                    0."/>
+    </surface>
+  </space>
+
+  <!-- Bend 2 Cylinder Assembly -->
+  <space name="bend2_space_assembly">
+    <surface name="inner_shell_2" node="inner_shell_circle_2_surface">
+      <transformation displacement="0. 0. 0."/>
+    </surface>
+    <surface name="outer_shell_2" node="outer_shell_circle_2_surface">
+      <transformation displacement="0. 0. 0."/>
+    </surface>
+    <surface name="entry_annulus_2" node="annulus_surface">
+      <transformation rotation_euler="0. 90. 0."
+                      displacement="[bend2_radii] 0. 0."/>
+    </surface>
+    <surface name="exit_annulus_2" node="annulus_surface">
+      <transformation rotation_euler="[bend2_angle] 90. 0."
+                      displacement="{[bend2_radii]*TMath::Cos([bend2_angle]*TMath::Pi()/180)}
+                                    {[bend2_radii]*TMath::Sin([bend2_angle]*TMath::Pi()/180)}
+                                    0."/>
+    </surface>
+  </space>
+
+  <!-- Bend 3 Cylinder Assembly -->
+  <space name="bend3_space_assembly">
+    <surface name="inner_shell_3" node="inner_shell_circle_3_surface">
+      <transformation displacement="0. 0. 0."/>
+    </surface>
+    <surface name="outer_shell_3" node="outer_shell_circle_3_surface">
+      <transformation displacement="0. 0. 0."/>
+    </surface>
+    <surface name="entry_annulus_3" node="annulus_surface">
+      <transformation rotation_euler="0. 90. 0."
+                      displacement="[bend3_radii] 0. 0."/>
+    </surface>
+    <surface name="exit_annulus_3" node="annulus_surface">
+      <transformation rotation_euler="[bend3_angle] 90. 0."
+                      displacement="{[bend3_radii]*TMath::Cos([bend3_angle]*TMath::Pi()/180)}
+                                    {[bend3_radii]*TMath::Sin([bend3_angle]*TMath::Pi()/180)}
+                                    0."/>
+    </surface>
+  </space>
+
+
+  <!-- Cylinder Tube -->
+  <tag name="cylinder_tube_tag">
+    <cylinder_tube_space
+      name="tube1_space"
+      z1="0."
+      z2="[tube1_length]"
+      r1="{[inner_diameter]/2}"
+      r2="{[outer_diameter]/2}"
+      radial_mesh_count="30"
+    />
+    <cylinder_tube_space
+      name="tube2_space"
+      z1="0."
+      z2="[tube2_length]"
+      r1="{[inner_diameter]/2}"
+      r2="{[outer_diameter]/2}"
+      radial_mesh_count="30"
+    />
+    <cylinder_tube_space
+      name="tube3_space"
+      z1="0."
+      z2="[tube3_length]"
+      r1="{[inner_diameter]/2}"
+      r2="{[outer_diameter]/2}"
+      radial_mesh_count="30"
+    />
+    <cylinder_tube_space
+      name="tube4_space"
+      z1="0."
+      z2="[tube4_length]"
+      r1="{[inner_diameter]/2}"
+      r2="{[outer_diameter]/2}"
+      radial_mesh_count="30"
+    />
+  </tag>
+
+  <!-- Beamline Assembly -->
+  <space name="beamline_assembly">
+    <space name="bend1" tree="bend1_space_assembly">
+      <transformation displacement="0. [bend1_radii] 0."
+                      rotation_euler="-90. 0. 0."/>
+    </space>
+    <space name="bend2" tree="bend2_space_assembly">
+      <transformation displacement="[P4x] [P4y] 0."
+                      rotation_euler="{[bend1_angle]-90.} 0. 0"/>
+    </space>
+    <space name="bend3" tree="bend3_space_assembly">
+      <transformation displacement="[P7x] [P7y] 0."
+                      rotation_euler="{[bend1_angle]+[bend2_angle]} 180. -90"/>
+    </space>
+    <space name="tube1" node="tube1_space">
+      <transformation displacement="[P1x] [P1y] 0."
+                      rotation_euler="{90+[bend1_angle]} 90. 0."/>
+    </space>
+    <space name="tube2" node="tube2_space">
+      <transformation displacement="[P2x] [P2y] 0."
+                      rotation_euler="{90+[bend1_angle]} 90. 0."/>
+    </space>
+    <space name="tube3" node="tube3_space">
+      <transformation displacement="[P5x] [P5y] 0."
+                      rotation_euler="{90+[bend1_angle]+[bend2_angle]} 90. 0."/>
+    </space>
+    <space name="tube4" node="tube4_space">
+      <transformation displacement="[P8x] [P8y] 0."
+                      rotation_euler="{90+[bend1_angle]+[bend2_angle]-[bend3_angle]} 90. 0."/>
+    </space>
+  </space>
+
+  <!-- World Assembly -->
+  <space name="world" node="world_space">
+    <space name="beamline" tree="beamline_assembly">
+      <transformation rotation_euler="0. 90. 0."/>
+    </space>
+  </space>
+
+  <!-- Appearance -->
+  <appearance name="app_entry_surface" color="255 127 0 127" arc="4096" surfaces="world/beamline/bend1/entry_annulus_1"/>
+  <appearance name="app_entry_surface" color="255 127 0 127" arc="4096" surfaces="world/beamline/bend2/entry_annulus_2"/>
+  <appearance name="app_entry_surface" color="255 127 0 127" arc="4096" surfaces="world/beamline/bend3/entry_annulus_3"/>
+  <appearance name="app_exit_surface" color="0 255 127 127" arc="4096" surfaces="world/beamline/bend1/exit_annulus_1"/>
+  <appearance name="app_exit_surface" color="0 255 127 127" arc="4096" surfaces="world/beamline/bend2/exit_annulus_2"/>
+  <appearance name="app_exit_surface" color="0 255 127 127" arc="4096" surfaces="world/beamline/bend3/exit_annulus_3"/>
+
+</geometry>
+
+
+<kassiopeia>
+
+  <!-- Generator -->
+  <ksgen_generator_composite name="generator_uniform" pid="2112">
+    <energy_composite>
+      <energy_fix value="1.e-7"/>
+      <!--energy_formula value_min="1.e-11" value_max="1.e-6"
+                      value_formula="2*TMath::Sqrt(x/TMath::Pi())*(1/([beta]*[e]))^(3/2)*exp(-x/[beta])"/-->
+      <!--energy_histogram path="[input_path]"
+        base="boltzmann_spectrum.root" histogram="histogram_1"/-->
+    </energy_composite>
+    <position_spherical_composite>
+      <r_fix value="0.01"/>
+      <theta_fix value="90."/>
+      <phi_fix value="0."/>
+    </position_spherical_composite>
+    <time_composite>
+      <time_fix value="0."/>
+    </time_composite>
+    <direction_spherical_composite>
+      <theta_spherical angle_min="45." angle_max="135."/>
+      <phi_uniform value_min="-45." value_max="45."/>
+    </direction_spherical_composite>
+    <!--spin_composite>
+      <theta_fix value="90."/>
+      <phi_uniform value_min="0." value_max="360."/>
+    </spin_composite-->
+  </ksgen_generator_composite>
+
+
+  <!-- Trajectories -->
+  <!--kstraj_trajectory_exact_spin name="trajectory_adiabatic_spin">
+    <interpolator_crk name="interpolator_crk"/>
+    <integrator_rk8 name="integrator_rk8"/>
+    <term_propagation name="term_propagation"/>
+    <term_gravity name="term_gravity" gravity="0. 0. -9.8"/>
+    <control_time name="control_time" time="1.e-8"/>
+  </kstraj_trajectory_exact_spin-->
+  <kstraj_trajectory_exact name="trajectory_exact">
+    <interpolator_fast name="interpolator_fast"/>
+    <integrator_rk8 name="integrator_rk8"/>
+    <term_propagation name="term_propagation"/>
+    <term_gravity name="term_gravity" gravity="0. 0. -9.8"/>
+    <control_time name="control_time" time="1.e-8"/>
+  </kstraj_trajectory_exact>
+
+  <!-- Space Navigators -->
+  <ksnav_space name="nav_space" enter_split="false" exit_split="false"/>
+
+  <!-- Surface Navigators -->
+  <ksnav_surface name="nav_surface" transmission_split="false" reflection_split="false"/>
+
+
+  <!-- Interactions -->
+    <!-- Surface Reflection Interaction for Stainless Steel -->
+  <ksint_surface_UCN name="int_surface_UCN" eta="1.e-4" alpha="5.e-6" real_optical_potential="1.88e-7"
+                     correlation_length="30.e-9"/>
+  <!--ksint_spin_rotate_y_pulse name="int_spin_rotate_y_pulse_1" time="5.e-4" angle="90."/-->
+
+
+  <!-- Terminators -->
+  <ksterm_death name="term_world"/>
+  <ksterm_max_steps name="term_max_steps" steps="1000000"/>
+
+
+  <!-- Writers -->
+  <kswrite_root name="write_root" path="[output_path]" base="beamline_simulation.root"/>
+  <kswrite_vtk name="write_vtk" path="[output_path]" base="beamline_simulation"/>
+
+
+  <!-- Outputs -->
+  <!--ks_component_member name="component_track_initial_particle" field="initial_particle" parent="track"/>
+  <ks_component_member name="component_track_final_particle" field="final_particle" parent="track"/>
+  <ks_component_member name="component_track_position" field="position" parent="component_track_final_particle"/>
+  <ks_component_member name="component_track_length" field="length" parent="component_track_final_particle"/-->
+
+  <!--
+  ks_component_member name="component_step_final_particle" field="final_particle" parent="step"/>
+
+  <ks_component_group name="component_step_world">
+    <component_member name="position" field="position" parent="component_step_final_particle"/>
+    <component_member name="kinetic_energy" field="kinetic_energy_ev" parent="component_step_final_particle"/>
+  </ks_component_group>
+
+  <kswrite_root_condition_step name="condition_nth_step"
+		group="component_step_world" parent="position" nth_step="{1000}"/
+  -->
+
+  <!--kswrite_root_condition_periodic name="condition_periodic"
+    group="component_step_world" parent="time" initial_min="0.9999"
+    initial_max="1.0001" increment="1." reset_min="0.499"
+    reset_max="0.501"/-->
+
+  <ks_component_member name="component_step_final_particle" field="final_particle" parent="step"/>
+
+  <ks_component_group name="component_step_world">
+    <component_member name="step_id" field="step_id" parent="step"/>
+    <component_member name="position" field="position" parent="component_step_final_particle"/>
+    <component_member name="kinetic_energy" field="kinetic_energy_ev" parent="component_step_final_particle"/>
+  </ks_component_group>
+
+  <!-- Output to sample the simulation and reduce amount of data -->
+  <kswrite_root_condition_step name="condition_nth_step" group="component_step_world" parent="step_id" nth_step="{100000}"/>
+
+
+  <!-- Structure -->
+  <ksgeo_space name="space_world" spaces="world">
+    <command parent="root_terminator" field="add_terminator" child="term_max_steps"/>
+    <command parent="root_terminator" field="remove_terminator" child="term_world"/>
+
+    <!--command parent="write_root" field="add_track_output" child="component_track_world"/-->
+    <command parent="write_root" field="add_step_output" child="component_step_world"/>
+    <command parent="write_root" field="add_step_write_condition" child="condition_nth_step"/>
+    <!--command parent="write_vtk" field="set_track_point" child="component_track_position"/>
+    <command parent="write_vtk" field="set_track_data" child="component_track_length"/>
+    <command parent="write_vtk" field="set_step_point" child="component_step_position"/>
+    <command parent="write_vtk" field="set_step_data" child="component_step_length"/-->
+
+    <geo_surface name="surface_reflection" surfaces="world/beamline/#">
+      <command parent="root_surface_interaction" field="set_surface_interaction" child="int_surface_UCN"/>
+    </geo_surface>
+  </ksgeo_space>
+
+
+  <!-- Simulation -->
+  <ks_simulation
+    run="1"
+    seed="51385"
+    events="1"
+    space="space_world"
+    generator="generator_uniform"
+    trajectory="trajectory_exact"
+    space_navigator="nav_space"
+    surface_navigator="nav_surface"
+    terminator="term_world"
+    writer="write_root"
+    writer="write_vtk"
+  />
+</kassiopeia>
+
+
+<vtk_window
+  name="vtk_window"
+  enable_display="true"
+  enable_write="true"
+  frame_title="KGeoBag Visualization"
+  frame_size_x="1024"
+  frame_size_y="768"
+  frame_color_red=".2"
+  frame_color_green=".2"
+  frame_color_blue=".2"
+  view_angle="45"
+  eye_angle="0.5"
+  multi_samples="4"
+  depth_peeling="10"
+>
+  <vtk_geometry_painter
+      name="geometry_painter"
+      path="[output_path]"
+      file="beamline_geometry.vtp"
+      surfaces="world/#"
+  />
+  <vtk_track_painter
+      name="track_painter"
+      path="[output_path]"
+      file="beamline_simulation.root"
+      point_object="component_step_world"
+      point_variable="position"
+      color_object="component_step_world"
+      color_variable="kinetic_energy"
+  />
+</vtk_window>
