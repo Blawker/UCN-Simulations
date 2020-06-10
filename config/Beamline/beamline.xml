@@ -88,6 +88,8 @@ Author: Thomas Guilbaud
   <define name="P7y" value="{-[bend3_radii]*TMath::Cos(([bend1_angle]+[bend2_angle])*TMath::Pi()/180)+[P6y]}"/>
   <define name="P8x" value="{[bend3_radii]*TMath::Sin(([bend3_angle]-[bend1_angle]-[bend2_angle])*TMath::Pi()/180)+[P7x]}"/>
   <define name="P8y" value="{[bend3_radii]*TMath::Cos(([bend3_angle]-[bend1_angle]-[bend2_angle])*TMath::Pi()/180)+[P7y]}"/>
+  <define name="P9x" value="{[tube4_length]*TMath::Cos(([bend3_angle]-[bend1_angle]-[bend2_angle])*TMath::Pi()/180)+[P8x]}"/>
+  <define name="P9y" value="{-[tube4_length]*TMath::Sin(([bend3_angle]-[bend1_angle]-[bend2_angle])*TMath::Pi()/180)+[P8y]}"/>
 
 
   <!-- World --> <!-- Needs to be more skinny -->
@@ -222,6 +224,11 @@ Author: Thomas Guilbaud
     />
   </tag>
 
+  <!-- Cylinder for the entry and exit of the beamline -->
+  <tag name="cylinder_tag">
+    <cylinder_space name="cylinder_border_space" z1="0." z2="[outer_diameter]" r="{[outer_diameter]/2}"/>
+  </tag>
+
   <!-- Beamline Assembly -->
   <space name="beamline_assembly">
     <space name="bend1" tree="bend1_space_assembly">
@@ -252,6 +259,13 @@ Author: Thomas Guilbaud
       <transformation displacement="[P8x] [P8y] 0."
                       rotation_euler="{90+[bend1_angle]+[bend2_angle]-[bend3_angle]} 90. 0."/>
     </space>
+    <space name="entry_cylinder" node="cylinder_border_space">
+      <transformation rotation_euler="90. -90. 0."/>
+    </space>
+    <space name="exit_cylinder" node="cylinder_border_space">
+      <transformation displacement="[P9x] [P9y] 0."
+                      rotation_euler="{90+[bend1_angle]+[bend2_angle]-[bend3_angle]} 90. 0."/>
+    </space>
   </space>
 
   <!-- World Assembly -->
@@ -268,6 +282,9 @@ Author: Thomas Guilbaud
   <appearance name="app_exit_surface" color="0 255 127 127" arc="4096" surfaces="world/beamline/bend1/exit_annulus_1"/>
   <appearance name="app_exit_surface" color="0 255 127 127" arc="4096" surfaces="world/beamline/bend2/exit_annulus_2"/>
   <appearance name="app_exit_surface" color="0 255 127 127" arc="4096" surfaces="world/beamline/bend3/exit_annulus_3"/>
+
+  <!--appearance name="app_entry_cylinder" color="255 127 0 127" arc="4096" surfaces="world/beamline/#entry_cylinder"/>
+  <appearance name="app_exit_cylinder" color="0 255 127 127" arc="4096" surfaces="world/beamline/#exit_cylinder"/-->
 
 </geometry>
 
@@ -343,6 +360,8 @@ Author: Thomas Guilbaud
 
   <!-- Terminators -->
   <ksterm_death name="term_world"/>
+  <ksterm_death name="term_entry_beamline"/>
+  <ksterm_death name="term_exit_beamline"/>
   <ksterm_max_steps name="term_max_steps" steps="5000000"/>
 
 
@@ -387,6 +406,14 @@ Author: Thomas Guilbaud
 
 
   <!-- Structure -->
+  <ksgeo_space name="entry_beamline" spaces="world/beamline/entry_cylinder">
+    <command parent="root_terminator" field="add_terminator" child="term_entry_beamline"/>
+  </ksgeo_space>
+
+  <ksgeo_space name="exit_beamline" spaces="world/beamline/exit_cylinder">
+    <command parent="root_terminator" field="add_terminator" child="term_exit_beamline"/>
+  </ksgeo_space>
+
   <ksgeo_space name="space_world" spaces="world">
     <command parent="root_terminator" field="add_terminator" child="term_max_steps"/>
     <command parent="root_terminator" field="remove_terminator" child="term_world"/>
@@ -408,8 +435,8 @@ Author: Thomas Guilbaud
   <!-- Simulation -->
   <ks_simulation
     run="1"
-    seed="51385"
-    events="100"
+    seed="51384"
+    events="10"
     space="space_world"
     generator="generator_uniform"
     trajectory="trajectory_exact"
