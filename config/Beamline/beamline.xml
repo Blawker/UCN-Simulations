@@ -283,8 +283,8 @@ Author: Thomas Guilbaud
   <appearance name="app_exit_surface" color="0 255 127 127" arc="4096" surfaces="world/beamline/bend2/exit_annulus_2"/>
   <appearance name="app_exit_surface" color="0 255 127 127" arc="4096" surfaces="world/beamline/bend3/exit_annulus_3"/>
 
-  <!--appearance name="app_entry_cylinder" color="255 127 0 127" arc="4096" surfaces="world/beamline/#entry_cylinder"/>
-  <appearance name="app_exit_cylinder" color="0 255 127 127" arc="4096" surfaces="world/beamline/#exit_cylinder"/-->
+  <!--appearance name="app_entry_cylinder" color="255 127 0 127" arc="4096" surfaces="world/beamline/#entry_cylinder"/-->
+  <appearance name="app_exit_cylinder" color="0 255 127 127" arc="4096" surfaces="world/beamline/@cylinder_tag"/>
 
 </geometry>
 
@@ -298,9 +298,9 @@ Author: Thomas Guilbaud
   <define name="beta" value="{[k]*[T]/[e]}"/>
   <ksgen_generator_composite name="generator_uniform" pid="2112">
     <energy_composite>
-      <!--energy_fix value="1.e-7"/-->
-      <energy_formula value_min="1.e-11" value_max="1.e-6"
-                      value_formula="2*TMath::Sqrt(x/TMath::Pi())*(1/([beta]*[e]))^(3/2)*exp(-x/[beta])"/>
+      <energy_fix value="1.8e-7"/>
+      <!--energy_formula value_min="1.e-11" value_max="1.e-7"
+                      value_formula="2*TMath::Sqrt(x/TMath::Pi())*(1/([beta]*[e]))^(3/2)*exp(-x/[beta])"/-->
       <!--energy_histogram path="[input_path]"
         base="boltzmann_spectrum.root" histogram="histogram_1"/-->
     </energy_composite>
@@ -336,7 +336,7 @@ Author: Thomas Guilbaud
     <integrator_rk65 name="integrator_rk65"/>
     <term_propagation name="term_propagation"/>
     <term_gravity name="term_gravity" gravity="0. 0. -9.8"/>
-    <control_time name="control_time" time="1.e-5"/>
+    <control_time name="control_time" time="1.e-6"/>
   </kstraj_trajectory_exact>
 
   <!-- Space Navigators -->
@@ -362,7 +362,7 @@ Author: Thomas Guilbaud
   <ksterm_death name="term_world"/>
   <ksterm_death name="term_entry_beamline"/>
   <ksterm_death name="term_exit_beamline"/>
-  <ksterm_max_steps name="term_max_steps" steps="5000000"/>
+  <ksterm_max_steps name="term_max_steps" steps="10000000"/>
 
 
   <!-- Writers -->
@@ -402,7 +402,7 @@ Author: Thomas Guilbaud
   </ks_component_group>
 
   <!-- Output to sample the simulation and reduce amount of data -->
-  <kswrite_root_condition_step name="condition_nth_step" group="component_step_world" parent="step_id" nth_step="{10000}"/>
+  <kswrite_root_condition_step name="condition_nth_step" group="component_step_world" parent="step_id" nth_step="{100}"/>
 
 
   <!-- Structure -->
@@ -410,9 +410,9 @@ Author: Thomas Guilbaud
     <command parent="root_terminator" field="add_terminator" child="term_max_steps"/>
     <command parent="root_terminator" field="remove_terminator" child="term_world"/>
 
-    <geo_space name="entry_beamline" spaces="world/beamline/entry_cylinder">
+    <!--geo_space name="entry_beamline" spaces="world/beamline/entry_cylinder">
       <command parent="root_terminator" field="add_terminator" child="term_entry_beamline"/>
-    </geo_space>
+    </geo_space-->
 
     <geo_space name="exit_beamline" spaces="world/beamline/exit_cylinder">
       <command parent="root_terminator" field="add_terminator" child="term_exit_beamline"/>
@@ -436,7 +436,7 @@ Author: Thomas Guilbaud
   <ks_simulation
     run="1"
     seed="51384"
-    events="100"
+    events="1"
     space="space_world"
     generator="generator_uniform"
     trajectory="trajectory_exact"
@@ -468,7 +468,7 @@ Author: Thomas Guilbaud
     name="geometry_painter"
     path="[output_path]"
     file="beamline_geometry.vtp"
-    surfaces="world/#"
+    surfaces="world/beamline/#"
   />
   <vtk_track_painter
     name="track_painter"
