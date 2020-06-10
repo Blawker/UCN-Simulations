@@ -304,11 +304,11 @@ Author: Thomas Guilbaud
       <!--energy_histogram path="[input_path]"
         base="boltzmann_spectrum.root" histogram="histogram_1"/-->
     </energy_composite>
-    <position_spherical_composite>
-      <r_fix value="0.01"/>
-      <theta_fix value="90."/>
-      <phi_fix value="0."/>
-    </position_spherical_composite>
+    <position_rectangular_composite>
+      <x_fix value="0.01"/>
+      <y_gauss value_min="{-[inner_diameter]/2+0.01}" value_max="{[inner_diameter]/2-0.01}" value_mean="0." value_sigma=".5"/>
+      <z_gauss value_min="{-[inner_diameter]/2+0.01}" value_max="{[inner_diameter]/2-0.01}" value_mean="0." value_sigma=".5"/>
+    </position_rectangular_composite>
     <time_composite>
       <time_fix value="0."/>
     </time_composite>
@@ -406,17 +406,17 @@ Author: Thomas Guilbaud
 
 
   <!-- Structure -->
-  <ksgeo_space name="entry_beamline" spaces="world/beamline/entry_cylinder">
-    <command parent="root_terminator" field="add_terminator" child="term_entry_beamline"/>
-  </ksgeo_space>
-
-  <ksgeo_space name="exit_beamline" spaces="world/beamline/exit_cylinder">
-    <command parent="root_terminator" field="add_terminator" child="term_exit_beamline"/>
-  </ksgeo_space>
-
   <ksgeo_space name="space_world" spaces="world">
     <command parent="root_terminator" field="add_terminator" child="term_max_steps"/>
     <command parent="root_terminator" field="remove_terminator" child="term_world"/>
+
+    <geo_space name="entry_beamline" spaces="world/beamline/entry_cylinder">
+      <command parent="root_terminator" field="add_terminator" child="term_entry_beamline"/>
+    </geo_space>
+
+    <geo_space name="exit_beamline" spaces="world/beamline/exit_cylinder">
+      <command parent="root_terminator" field="add_terminator" child="term_exit_beamline"/>
+    </geo_space>
 
     <!--command parent="write_root" field="add_track_output" child="component_track_world"/-->
     <command parent="write_root" field="add_step_output" child="component_step_world"/>
@@ -436,7 +436,7 @@ Author: Thomas Guilbaud
   <ks_simulation
     run="1"
     seed="51384"
-    events="10"
+    events="100"
     space="space_world"
     generator="generator_uniform"
     trajectory="trajectory_exact"
