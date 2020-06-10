@@ -20,9 +20,9 @@ Created the 8. June 2020
 Author: Thomas Guilbaud
 -->
 
-<define name="output_path" value="[KASPERSYS]/../../Stage 2A - UCN - 2020/UCN-Simulation/output/Beamline"/>
-<define name="log_path" value="[KASPERSYS]/../../Stage 2A - UCN - 2020/UCN-Simulation/log/Beamline"/>
-<define name="input_path" value="[KASPERSYS]/../../Stage 2A - UCN - 2020/UCN-Simulation/config/Beamline"/>
+<define name="output_path" value="[KASPERSYS]/../../Stage 2A - UCN - 2020/UCN-Simulations/output/Beamline"/>
+<define name="log_path" value="[KASPERSYS]/../../Stage 2A - UCN - 2020/UCN-Simulations/log/Beamline"/>
+<define name="input_path" value="[KASPERSYS]/../../Stage 2A - UCN - 2020/UCN-Simulations/config/Beamline"/>
 
 
 <messages>
@@ -275,11 +275,15 @@ Author: Thomas Guilbaud
 <kassiopeia>
 
   <!-- Generator -->
+  <define name="T" value="3.e-3"/> <!-- Temperature in K -->
+  <define name="k" value="1.38e-23"/> <!-- Boltzmann Constant -->
+  <define name="e" value="1.602e-19"/> <!-- Coulomb charge -->
+  <define name="beta" value="{[k]*[T]/[e]}"/>
   <ksgen_generator_composite name="generator_uniform" pid="2112">
     <energy_composite>
-      <energy_fix value="1.e-7"/>
-      <!--energy_formula value_min="1.e-11" value_max="1.e-6"
-                      value_formula="2*TMath::Sqrt(x/TMath::Pi())*(1/([beta]*[e]))^(3/2)*exp(-x/[beta])"/-->
+      <!--energy_fix value="1.e-7"/-->
+      <energy_formula value_min="1.e-11" value_max="1.e-7"
+                      value_formula="2*TMath::Sqrt(x/TMath::Pi())*(1/([beta]*[e]))^(3/2)*exp(-x/[beta])"/>
       <!--energy_histogram path="[input_path]"
         base="boltzmann_spectrum.root" histogram="histogram_1"/-->
     </energy_composite>
@@ -312,10 +316,10 @@ Author: Thomas Guilbaud
   </kstraj_trajectory_exact_spin-->
   <kstraj_trajectory_exact name="trajectory_exact">
     <interpolator_fast name="interpolator_fast"/>
-    <integrator_rk8 name="integrator_rk8"/>
+    <integrator_rk65 name="integrator_rk65"/>
     <term_propagation name="term_propagation"/>
     <term_gravity name="term_gravity" gravity="0. 0. -9.8"/>
-    <control_time name="control_time" time="1.e-8"/>
+    <control_time name="control_time" time="1.e-5"/>
   </kstraj_trajectory_exact>
 
   <!-- Space Navigators -->
@@ -334,7 +338,7 @@ Author: Thomas Guilbaud
 
   <!-- Terminators -->
   <ksterm_death name="term_world"/>
-  <ksterm_max_steps name="term_max_steps" steps="1000000"/>
+  <ksterm_max_steps name="term_max_steps" steps="5000000"/>
 
 
   <!-- Writers -->
@@ -374,7 +378,7 @@ Author: Thomas Guilbaud
   </ks_component_group>
 
   <!-- Output to sample the simulation and reduce amount of data -->
-  <kswrite_root_condition_step name="condition_nth_step" group="component_step_world" parent="step_id" nth_step="{100000}"/>
+  <kswrite_root_condition_step name="condition_nth_step" group="component_step_world" parent="step_id" nth_step="{10000}"/>
 
 
   <!-- Structure -->
@@ -400,7 +404,7 @@ Author: Thomas Guilbaud
   <ks_simulation
     run="1"
     seed="51385"
-    events="1"
+    events="100"
     space="space_world"
     generator="generator_uniform"
     trajectory="trajectory_exact"
