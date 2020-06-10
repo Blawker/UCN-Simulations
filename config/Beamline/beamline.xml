@@ -91,8 +91,8 @@ Author: Thomas Guilbaud
 
 
   <!-- World --> <!-- Needs to be more skinny -->
-  <!--cylinder_space name="world_space" z1="{-[outer_diameter]*1.01}" z2="1.7" r="2."/-->
-  <box_space name="world_space" xa="-0.01" ya="-0.1" za="{-[outer_diameter]*1.01}" xb="1.5" yb="0.1" zb="1.7"/>
+  <cylinder_space name="world_space" z1="{-[outer_diameter]*1.01}" z2="1.7" r="2."/>
+  <!--box_space name="world_space" xa="-0.01" ya="-0.1" za="{-[outer_diameter]*1.01}" xb="1.5" yb="0.1" zb="1.7"/-->
 
 
   <!-- Bend part -->
@@ -282,7 +282,7 @@ Author: Thomas Guilbaud
   <ksgen_generator_composite name="generator_uniform" pid="2112">
     <energy_composite>
       <!--energy_fix value="1.e-7"/-->
-      <energy_formula value_min="1.e-11" value_max="1.e-7"
+      <energy_formula value_min="1.e-11" value_max="1.e-6"
                       value_formula="2*TMath::Sqrt(x/TMath::Pi())*(1/([beta]*[e]))^(3/2)*exp(-x/[beta])"/>
       <!--energy_histogram path="[input_path]"
         base="boltzmann_spectrum.root" histogram="histogram_1"/-->
@@ -331,8 +331,13 @@ Author: Thomas Guilbaud
 
   <!-- Interactions -->
     <!-- Surface Reflection Interaction for Stainless Steel -->
-  <ksint_surface_UCN name="int_surface_UCN" eta="1.e-4" alpha="5.e-6" real_optical_potential="1.88e-7"
-                     correlation_length="30.e-9"/>
+    <!--  eta: loss per bounce,                          alpha: spin depolarization,
+          real_optical_potential: fermi potential (eV),  correlation_length: roughness (m) -->
+  <ksint_surface_UCN name="int_surface_UCN"
+    eta="2.e-4"
+    alpha="5.e-6"
+    real_optical_potential="2.08e-7"
+    correlation_length="20.e-9"/>
   <!--ksint_spin_rotate_y_pulse name="int_spin_rotate_y_pulse_1" time="5.e-4" angle="90."/-->
 
 
