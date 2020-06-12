@@ -259,9 +259,9 @@ Author: Thomas Guilbaud
       <transformation displacement="[P8x] [P8y] 0."
                       rotation_euler="{90+[bend1_angle]+[bend2_angle]-[bend3_angle]} 90. 0."/>
     </space>
-    <!--space name="entry_cylinder" node="cylinder_border_space">
+    <space name="entry_cylinder" node="cylinder_border_space">
       <transformation rotation_euler="90. -90. 0."/>
-    </space-->
+    </space>
     <space name="exit_cylinder" node="cylinder_border_space">
       <transformation displacement="[P9x] [P9y] 0."
                       rotation_euler="{90+[bend1_angle]+[bend2_angle]-[bend3_angle]} 90. 0."/>
@@ -298,9 +298,9 @@ Author: Thomas Guilbaud
   <define name="beta" value="{[k]*[T]/[e]}"/>
   <ksgen_generator_composite name="generator_uniform" pid="2112">
     <energy_composite>
-      <!--energy_fix value="1.8e-7"/-->
-      <energy_formula value_min="1.e-11" value_max="1.8e-7"
-                      value_formula="2*TMath::Sqrt(x/TMath::Pi())*(1/([beta]*[e]))^(3/2)*exp(-x/[beta])"/>
+      <energy_fix value="1.8e-7"/>
+      <!--energy_formula value_min="1.e-11" value_max="1.8e-7"
+                      value_formula="2*TMath::Sqrt(x/TMath::Pi())*(1/([beta]*[e]))^(3/2)*exp(-x/[beta])"/-->
       <!--energy_histogram path="[input_path]"
         base="boltzmann_spectrum.root" histogram="histogram_1"/-->
     </energy_composite>
@@ -313,8 +313,10 @@ Author: Thomas Guilbaud
       <time_fix value="0."/>
     </time_composite>
     <direction_spherical_composite>
-      <theta_spherical angle_min="45." angle_max="135."/>
-      <phi_uniform value_min="-45." value_max="45."/>
+      <!--theta_spherical angle_min="45." angle_max="135."/>
+      <phi_uniform value_min="-45." value_max="45."/-->
+      <theta_fix value="90."/>
+      <phi_fix value="0."/>
     </direction_spherical_composite>
     <!--spin_composite>
       <theta_fix value="90."/>
@@ -371,39 +373,45 @@ Author: Thomas Guilbaud
 
 
   <!-- Outputs -->
-  <ks_component_member name="component_track_initial_particle" field="initial_particle" parent="track"/>
+  <!--ks_component_member name="component_track_initial_particle" field="initial_particle" parent="track"/>
   <ks_component_member name="component_track_final_particle" field="final_particle" parent="track"/>
+  <ks_component_member name="component_track_position" field="position" parent="component_track_final_particle"/>
+  <ks_component_member name="component_track_length" field="length" parent="component_track_final_particle"/-->
 
-  <ks_component_group name="component_track_world">
-    <component_member name="terminator_name" field="terminator_name" parent="track"/>
-    <component_member name="total_steps" field="total_steps" parent="track"/>
-    <component_member name="initial_kinetic_energy" field="kinetic_energy_ev" parent="component_track_initial_particle"/>
-    <component_member name="final_kinetic_energy" field="kinetic_energy_ev" parent="component_track_final_particle"/>
+  <!--
+  ks_component_member name="component_step_final_particle" field="final_particle" parent="step"/>
+
+  <ks_component_group name="component_step_world">
+    <component_member name="position" field="position" parent="component_step_final_particle"/>
+    <component_member name="kinetic_energy" field="kinetic_energy_ev" parent="component_step_final_particle"/>
   </ks_component_group>
 
-  <!--ks_component_member name="component_step_final_particle" field="final_particle" parent="step"/>
+  <kswrite_root_condition_step name="condition_nth_step"
+		group="component_step_world" parent="position" nth_step="{1000}"/
+  -->
+
+  <!--kswrite_root_condition_periodic name="condition_periodic"
+    group="component_step_world" parent="time" initial_min="0.9999"
+    initial_max="1.0001" increment="1." reset_min="0.499"
+    reset_max="0.501"/-->
+
+  <!-- For the test of integrators and value of control_time -->
+  <ks_component_member name="component_step_final_particle" field="final_particle" parent="step"/>
 
   <ks_component_group name="component_step_world">
     <component_member name="step_id" field="step_id" parent="step"/>
     <component_member name="position" field="position" parent="component_step_final_particle"/>
     <component_member name="kinetic_energy" field="kinetic_energy_ev" parent="component_step_final_particle"/>
-  </ks_component_group-->
+  </ks_component_group>
 
   <!-- Output to sample the simulation and reduce amount of data -->
-  <!--kswrite_root_condition_step name="condition_nth_step" group="component_step_world" parent="step_id" nth_step="{100}"/-->
+  <kswrite_root_condition_step name="condition_nth_step" group="component_step_world" parent="step_id" nth_step="{100}"/>
 
 
   <!-- Structure -->
   <ksgeo_space name="space_world" spaces="world">
     <command parent="root_terminator" field="add_terminator" child="term_max_steps"/>
     <command parent="root_terminator" field="remove_terminator" child="term_world"/>
-
-    <command parent="write_root" field="add_track_output" child="component_track_world"/>
-    <!--command parent="write_root" field="add_step_output" child="component_step_world"/-->
-    <!--command parent="write_vtk" field="set_track_point" child="component_track_position"/>
-    <command parent="write_vtk" field="set_track_data" child="component_track_length"/>
-    <command parent="write_vtk" field="set_step_point" child="component_step_position"/>
-    <command parent="write_vtk" field="set_step_data" child="component_step_length"/-->
 
     <!--geo_space name="entry_beamline" spaces="world/beamline/entry_cylinder">
       <command parent="root_terminator" field="add_terminator" child="term_entry_beamline"/>
@@ -412,6 +420,14 @@ Author: Thomas Guilbaud
     <geo_space name="exit_beamline" spaces="world/beamline/exit_cylinder">
       <command parent="root_terminator" field="add_terminator" child="term_exit_beamline"/>
     </geo_space>
+
+    <!--command parent="write_root" field="add_track_output" child="component_track_world"/-->
+    <command parent="write_root" field="add_step_output" child="component_step_world"/>
+    <command parent="write_root" field="add_step_write_condition" child="condition_nth_step"/>
+    <!--command parent="write_vtk" field="set_track_point" child="component_track_position"/>
+    <command parent="write_vtk" field="set_track_data" child="component_track_length"/>
+    <command parent="write_vtk" field="set_step_point" child="component_step_position"/>
+    <command parent="write_vtk" field="set_step_data" child="component_step_length"/-->
 
     <geo_surface name="surface_reflection" surfaces="world/beamline/#">
       <command parent="root_surface_interaction" field="set_surface_interaction" child="int_surface_UCN"/>
@@ -436,7 +452,7 @@ Author: Thomas Guilbaud
 </kassiopeia>
 
 
-<!--vtk_window
+<vtk_window
   name="vtk_window"
   enable_display="true"
   enable_write="true"
@@ -466,4 +482,4 @@ Author: Thomas Guilbaud
     color_object="component_step_world"
     color_variable="kinetic_energy"
   />
-</vtk_window-->
+</vtk_window>
