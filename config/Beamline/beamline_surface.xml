@@ -96,13 +96,7 @@ Author: Thomas Guilbaud
   <cylinder_space name="world_space" z1="{-[outer_diameter]*1.01}" z2="1.7" r="2."/>
   <!--box_space name="world_space" xa="-0.01" ya="-0.1" za="{-[outer_diameter]*1.01}" xb="1.5" yb="0.1" zb="1.7"/-->
 
-
-  <!-- Bend part -->
-  <tag name="annulus_tag">
-    <annulus_surface name="annulus_surface" z="0." r1="{[inner_diameter]/2}" r2="{[outer_diameter]/2}"
-      radial_mesh_count="22" radial_mesh_power="1.5" axial_mesh_count="32"/>
-  </tag>
-
+  <!-- Shell Surface -->
   <tag name="inner_bend_tag">
     <shell_circle_surface name="inner_shell_circle_1_surface" angle_start="0" angle_stop="[bend1_angle]" shell_mesh_count="32" shell_mesh_power="6">
       <circle x="0." y="[bend1_radii]" radius="{[inner_diameter]/2}" circle_mesh_count="32"/>
@@ -115,171 +109,87 @@ Author: Thomas Guilbaud
     </shell_circle_surface>
   </tag>
 
-  <tag name="outer_bend_tag">
-    <shell_circle_surface name="outer_shell_circle_1_surface" angle_start="0" angle_stop="[bend1_angle]" shell_mesh_count="32" shell_mesh_power="6">
-      <circle x="0." y="[bend1_radii]" radius="{[outer_diameter]/2}" circle_mesh_count="32"/>
-    </shell_circle_surface>
-    <shell_circle_surface name="outer_shell_circle_2_surface" angle_start="0" angle_stop="[bend2_angle]" shell_mesh_count="32" shell_mesh_power="6">
-      <circle x="0." y="[bend2_radii]" radius="{[outer_diameter]/2}" circle_mesh_count="32"/>
-    </shell_circle_surface>
-    <shell_circle_surface name="outer_shell_circle_3_surface" angle_start="0" angle_stop="[bend3_angle]" shell_mesh_count="32" shell_mesh_power="6">
-      <circle x="0." y="[bend3_radii]" radius="{[outer_diameter]/2}" circle_mesh_count="32"/>
-    </shell_circle_surface>
-  </tag>
-
-  <!-- Bend 1 Cylinder Assembly -->
-  <space name="bend1_space_assembly">
-    <surface name="inner_shell_1" node="inner_shell_circle_1_surface">
-      <transformation displacement="0. 0. 0."/>
-    </surface>
-    <surface name="outer_shell_1" node="outer_shell_circle_1_surface">
-      <transformation displacement="0. 0. 0."/>
-    </surface>
-    <surface name="entry_annulus_1" node="annulus_surface">
-      <transformation rotation_euler="0. 90. 0."
-                      displacement="[bend1_radii] 0. 0."/>
-    </surface>
-    <surface name="exit_annulus_1" node="annulus_surface">
-      <transformation rotation_euler="[bend1_angle] 90. 0."
-                      displacement="{[bend1_radii]*TMath::Cos([bend1_angle]*TMath::Pi()/180)}
-                                    {[bend1_radii]*TMath::Sin([bend1_angle]*TMath::Pi()/180)}
-                                    0."/>
-    </surface>
-  </space>
-
-  <!-- Bend 2 Cylinder Assembly -->
-  <space name="bend2_space_assembly">
-    <surface name="inner_shell_2" node="inner_shell_circle_2_surface">
-      <transformation displacement="0. 0. 0."/>
-    </surface>
-    <surface name="outer_shell_2" node="outer_shell_circle_2_surface">
-      <transformation displacement="0. 0. 0."/>
-    </surface>
-    <surface name="entry_annulus_2" node="annulus_surface">
-      <transformation rotation_euler="0. 90. 0."
-                      displacement="[bend2_radii] 0. 0."/>
-    </surface>
-    <surface name="exit_annulus_2" node="annulus_surface">
-      <transformation rotation_euler="[bend2_angle] 90. 0."
-                      displacement="{[bend2_radii]*TMath::Cos([bend2_angle]*TMath::Pi()/180)}
-                                    {[bend2_radii]*TMath::Sin([bend2_angle]*TMath::Pi()/180)}
-                                    0."/>
-    </surface>
-  </space>
-
-  <!-- Bend 3 Cylinder Assembly -->
-  <space name="bend3_space_assembly">
-    <surface name="inner_shell_3" node="inner_shell_circle_3_surface">
-      <transformation displacement="0. 0. 0."/>
-    </surface>
-    <surface name="outer_shell_3" node="outer_shell_circle_3_surface">
-      <transformation displacement="0. 0. 0."/>
-    </surface>
-    <surface name="entry_annulus_3" node="annulus_surface">
-      <transformation rotation_euler="0. 90. 0."
-                      displacement="[bend3_radii] 0. 0."/>
-    </surface>
-    <surface name="exit_annulus_3" node="annulus_surface">
-      <transformation rotation_euler="[bend3_angle] 90. 0."
-                      displacement="{[bend3_radii]*TMath::Cos([bend3_angle]*TMath::Pi()/180)}
-                                    {[bend3_radii]*TMath::Sin([bend3_angle]*TMath::Pi()/180)}
-                                    0."/>
-    </surface>
-  </space>
-
-
-  <!-- Cylinder Tube -->
-  <tag name="cylinder_tube_tag">
-    <cylinder_tube_space
-      name="tube1_space"
+  <!-- Cylinder Surface -->
+  <tag name="cylinder_surface_tag">
+    <cylinder_surface
+      name="tube1_surface"
       z1="0."
       z2="[tube1_length]"
-      r1="{[inner_diameter]/2}"
-      r2="{[outer_diameter]/2}"
-      radial_mesh_count="30"
+      r="{[inner_diameter]/2}"
     />
-    <cylinder_tube_space
-      name="tube2_space"
+    <cylinder_surface
+      name="tube2_surface"
       z1="0."
       z2="[tube2_length]"
-      r1="{[inner_diameter]/2}"
-      r2="{[outer_diameter]/2}"
-      radial_mesh_count="30"
+      r="{[inner_diameter]/2}"
     />
-    <cylinder_tube_space
-      name="tube3_space"
+    <cylinder_surface
+      name="tube3_surface"
       z1="0."
       z2="[tube3_length]"
-      r1="{[inner_diameter]/2}"
-      r2="{[outer_diameter]/2}"
-      radial_mesh_count="30"
+      r="{[inner_diameter]/2}"
     />
-    <cylinder_tube_space
-      name="tube4_space"
+    <cylinder_surface
+      name="tube4_surface"
       z1="0."
       z2="[tube4_length]"
-      r1="{[inner_diameter]/2}"
-      r2="{[outer_diameter]/2}"
-      radial_mesh_count="30"
+      r="{[inner_diameter]/2}"
     />
   </tag>
 
-  <!-- Cylinder -->
+  <!-- Cylinder Space -->
   <tag name="cylinder_tag">
-    <cylinder_space name="cylinder_space" r="{[outer_diameter]/2}" z1="0.001" z2="0.05"/>
+    <cylinder_space name="cylinder_space" r="{[inner_diameter]/2}" z1="0.001" z2="0.05"/>
+  </tag>
+
+  <!-- Detector Cover Space -->
+  <tag name="detector_cover_tag">
+    <cylinder_tube_space name="cylinder_tube_cover_space" z1="-0.05" z2="0.05" r1="{1.001*[inner_diameter]/2}" r2="[inner_diameter]"/>
+    <cylinder_space name="cylinder_cover_space" r="[inner_diameter]" z1="0.05" z2="0.1"/>
   </tag>
 
   <!-- Disk Surface -->
   <tag name="disk_join_tag">
-    <disk_surface name="disk_join_surface" r="{[outer_diameter]/2}" z="0."/>
+    <disk_surface name="disk_join_surface" r="{[inner_diameter]/2}" z="0."/>
   </tag>
 
 
   <!-- Beamline Tube Assembly -->
   <space name="beamline_tube_assembly">
     <!-- Bend Part -->
-    <space name="bend1" tree="bend1_space_assembly">
+    <surface name="bend1" node="inner_shell_circle_1_surface">
       <transformation displacement="0. [bend1_radii] 0."
                       rotation_euler="-90. 0. 0."/>
-    </space>
-    <space name="bend2" tree="bend2_space_assembly">
+    </surface>
+    <surface name="bend2" node="inner_shell_circle_2_surface">
       <transformation displacement="[P4x] [P4y] 0."
                       rotation_euler="{[bend1_angle]-90.} 0. 0"/>
-    </space>
-    <space name="bend3" tree="bend3_space_assembly">
+    </surface>
+    <surface name="bend3" node="inner_shell_circle_3_surface">
       <transformation displacement="[P7x] [P7y] 0."
                       rotation_euler="{[bend1_angle]+[bend2_angle]} 180. -90"/>
-    </space>
+    </surface>
     <!-- Tube Part -->
-    <space name="tube1" node="tube1_space">
+    <surface name="tube1" node="tube1_surface">
       <transformation displacement="[P1x] [P1y] 0."
                       rotation_euler="{90+[bend1_angle]} 90. 0."/>
-    </space>
-    <space name="tube2" node="tube2_space">
+    </surface>
+    <surface name="tube2" node="tube2_surface">
       <transformation displacement="[P2x] [P2y] 0."
                       rotation_euler="{90+[bend1_angle]} 90. 0."/>
-    </space>
-    <space name="tube3" node="tube3_space">
+    </surface>
+    <surface name="tube3" node="tube3_surface">
       <transformation displacement="[P5x] [P5y] 0."
                       rotation_euler="{90+[bend1_angle]+[bend2_angle]} 90. 0."/>
-    </space>
-    <space name="tube4" node="tube4_space">
+    </surface>
+    <surface name="tube4" node="tube4_surface">
       <transformation displacement="[P8x] [P8y] 0."
                       rotation_euler="{90+[bend1_angle]+[bend2_angle]-[bend3_angle]} 90. 0."/>
-    </space>
-    <!-- Entry Disk part -->
-    <surface name="entry_disk" node="disk_join_surface">
-      <transformation rotation_euler="90. 90. 0."/>
-    </surface>
-
-    <surface name="disk_sample_P1" node="disk_join_surface">
-      <transformation displacement="[P1x] [P1y] 0."
-                      rotation_euler="{90+[bend1_angle]} 90. 0."/>
     </surface>
   </space>
 
   <!-- Disk Sample Assembly -->
-  <space name="disk_sample_assembly">
+  <!--space name="disk_sample_assembly">
     <surface name="disk_sample_P1" node="disk_join_surface">
       <transformation displacement="[P1x] [P1y] 0."
                       rotation_euler="{90+[bend1_angle]} 90. 0."/>
@@ -304,20 +214,36 @@ Author: Thomas Guilbaud
       <transformation displacement="[P8x] [P8y] 0."
                       rotation_euler="{90+[bend1_angle]+[bend2_angle]-[bend3_angle]} 90. 0."/>
     </surface>
-  </space>
-
-  <!-- Out Disk Assembly -->
-  <space name="out_disk_assembly">
-    <surface name="exit_disk" node="disk_join_surface">
+    <surface name="disk_sample_P9" node="disk_join_surface"> < Exit surface >
       <transformation displacement="[P9x] [P9y] 0."
                       rotation_euler="{90+[bend1_angle]+[bend2_angle]-[bend3_angle]} 90. 0."/>
-      <!--transformation displacement="[P1x] [P1y] 0."
-                      rotation_euler="{90+[bend1_angle]} 90. 0."/-->
     </surface>
-    <space name="stop_sample_cylinder" node="cylinder_space">
-      <transformation displacement="[P2x] [P2y] 0."
-                      rotation_euler="{90+[bend1_angle]} 90. 0."/>
+  </space-->
+
+  <!-- Detector Cover Assembly -->
+  <space name="detector_cover_assembly">
+    <space name="radial_cover" node="cylinder_tube_cover_space"/>
+    <space name="bottom_cover" node="cylinder_cover_space"/>
+  </space>
+
+  <!-- Boundary Assembly -->
+  <space name="boundary_assembly">
+    <space name="exit_cylinder" node="cylinder_space">
+      <transformation displacement="[P9x] [P9y] 0."
+                      rotation_euler="{90+[bend1_angle]+[bend2_angle]-[bend3_angle]} 90. 0."/>
     </space>
+    <space name="detector_cover" tree="detector_cover_assembly">
+      <transformation displacement="[P9x] [P9y] 0."
+                      rotation_euler="{90+[bend1_angle]+[bend2_angle]-[bend3_angle]} 90. 0."/>
+    </space>
+    <space name="entry_cylinder" node="cylinder_space">
+      <transformation displacement="0. 0. 0."
+                      rotation_euler="90. -90. 0."/>
+    </space>
+    <!-- Surface Entry (Surface UCN Generator) -->
+    <surface name="entry_disk" node="disk_join_surface">
+      <transformation rotation_euler="90. 90. 0."/>
+    </surface>
   </space>
 
 
@@ -326,10 +252,10 @@ Author: Thomas Guilbaud
     <space name="beamline_tube" tree="beamline_tube_assembly">
       <transformation rotation_euler="0. 90. 0."/>
     </space>
-    <space name="surface_sample" tree="disk_sample_assembly">
+    <!--space name="surface_sample" tree="disk_sample_assembly">
       <transformation rotation_euler="0. 90. 0."/>
-    </space>
-    <space name="out_disk" tree="out_disk_assembly">
+    </space-->
+    <space name="boundary" tree="boundary_assembly">
       <transformation rotation_euler="0. 90. 0."/>
     </space>
   </space>
@@ -341,16 +267,11 @@ Author: Thomas Guilbaud
   </space>
 
   <!-- Appearance -->
-  <appearance name="app_entry_surface" color="255 127 0 127" arc="4096" surfaces="world/beamline/beamline_tube/bend1/entry_annulus_1"/>
-  <appearance name="app_entry_surface" color="255 127 0 127" arc="4096" surfaces="world/beamline/beamline_tube/bend2/entry_annulus_2"/>
-  <appearance name="app_entry_surface" color="255 127 0 127" arc="4096" surfaces="world/beamline/beamline_tube/bend3/entry_annulus_3"/>
-  <appearance name="app_exit_surface" color="0 255 127 127" arc="4096" surfaces="world/beamline/beamline_tube/bend1/exit_annulus_1"/>
-  <appearance name="app_exit_surface" color="0 255 127 127" arc="4096" surfaces="world/beamline/beamline_tube/bend2/exit_annulus_2"/>
-  <appearance name="app_exit_surface" color="0 255 127 127" arc="4096" surfaces="world/beamline/beamline_tube/bend3/exit_annulus_3"/>
+  <!-- Boundary Space -->
+  <appearance name="app_entry_cylinder" color="255 127 0 127" arc="4096" surfaces="world/beamline/boundary/entry_cylinder/#"/>
+  <appearance name="app_exit_cylinder" color="0 255 127 127" arc="4096" surfaces="world/beamline/boundary/exit_cylinder/#"/>
 
-  <appearance name="app_entry_cylinder" color="255 127 0 127" arc="4096" surfaces="world/beamline/beamline_tube/entry_disk"/>
-  <appearance name="app_exit_cylinder" color="0 255 127 127" arc="4096" surfaces="world/beamline/out_disk/exit_disk"/>
-
+  <!-- Surface Sample -->
   <appearance name="app_disk_join" color="255 127 0 127" arc="4096" surfaces="world/beamline/@disk_join_tag"/>
 </geometry>
 
@@ -364,17 +285,13 @@ Author: Thomas Guilbaud
   <define name="beta" value="{[k]*[T]/[e]}"/>
   <ksgen_generator_composite name="generator_uniform" pid="2112">
     <energy_composite>
-      <!--energy_fix value="1.8e-7"/-->
       <!-- Boltzmann distribution of the energy of UCN -->
-      <!--energy_formula value_min="1.e-11" value_max="2.e-7"
-                      value_formula="2*TMath::Sqrt(x/TMath::Pi())*(1/([beta]*[e]))^(3/2)*exp(-x/[beta])"/-->
-      <energy_histogram path="[input_path]"
-        base="beamline_spectrum_P1.root" histogram="hke_P1"/>
+      <energy_formula value_min="1.30e-7" value_max="3.e-7"
+                      value_formula="2*TMath::Sqrt(x/TMath::Pi())*(1/([beta]*[e]))^(3/2)*exp(-x/[beta])"/>
+      <!--energy_histogram path="[input_path]"
+        base="beamline_spectrum_P1.root" histogram="hke_P1"/-->
     </energy_composite>
-    <position_rectangular_composite surface="world/beamline/beamline_tube/disk_sample_P1"> <!-- Initial position at the origin, entry of the beamline -->
-      <!--x_fix value="0.01"/>
-      <y_gauss value_min="{-[inner_diameter]/2+0.01}" value_max="{[inner_diameter]/2-0.01}" value_mean="0." value_sigma=".5"/>
-      <z_gauss value_min="{-[inner_diameter]/2+0.01}" value_max="{[inner_diameter]/2-0.01}" value_mean="0." value_sigma=".5"/-->
+    <position_rectangular_composite surface="world/beamline/boundary/entry_disk"> <!-- Initial position at the origin, entry of the beamline -->
       <x_gauss value_min="{-[inner_diameter]/2+0.001}" value_max="{[inner_diameter]/2-0.001}" value_mean="0." value_sigma=".01"/>
       <y_gauss value_min="{-[inner_diameter]/2+0.001}" value_max="{[inner_diameter]/2-0.001}" value_mean="0." value_sigma=".01"/>
       <z_fix value="0.01"/>
@@ -383,15 +300,9 @@ Author: Thomas Guilbaud
       <time_fix value="0."/>
     </time_composite>
     <direction_spherical_composite> <!-- Direction pointed inside the beamline -->
-      <theta_spherical angle_min="0." angle_max="90."/>
+      <theta_spherical angle_min="45." angle_max="135."/>
       <phi_uniform value_min="-45." value_max="45."/>
-      <!--theta_fix value="90."/>
-      <phi_fix value="0."/-->
     </direction_spherical_composite>
-    <!--spin_composite>
-      <theta_fix value="90."/>
-      <phi_uniform value_min="0." value_max="360."/>
-    </spin_composite-->
   </ksgen_generator_composite>
 
 
@@ -420,29 +331,25 @@ Author: Thomas Guilbaud
     alpha="5.e-6"
     real_optical_potential="2.08e-7"
     correlation_length="20.e-9"/>
-  <!--ksint_spin_rotate_y_pulse name="int_spin_rotate_y_pulse_1" time="5.e-4" angle="90."/-->
 
 
   <!-- Terminators -->
   <ksterm_death name="term_world"/>
   <ksterm_death name="term_entry_beamline"/>
-  <ksterm_death name="term_exit_beamline"/>
-  <ksterm_max_steps name="term_max_steps" steps="1000000"/>
+  <ksterm_death name="term_cover_beamline"/>
+  <ksterm_death name="term_detector_beamline"/>
+  <ksterm_max_steps name="term_max_steps" steps="100000000"/>
 
 
   <!-- Writers -->
-  <kswrite_root name="write_root" path="[output_path]" base="beamline_simulation_7.root"/>
+  <kswrite_root name="write_root" path="[output_path]" base="beamline_surface_simulation_8.root"/>
   <kswrite_vtk name="write_vtk" path="[output_path]" base="beamline_simulation"/>
-  <!-- Output to sample the simulation and reduce amount of data -->
-  <!--kswrite_root_condition_step name="condition_nth_step" group="component_step_world" parent="step_id" nth_step="{100}"/-->
 
 
   <!-- Outputs -->
-  <!-- Track -->
+    <!-- Track -->
   <ks_component_member name="component_track_initial_particle" field="initial_particle" parent="track"/>
   <ks_component_member name="component_track_final_particle" field="final_particle" parent="track"/>
-  <!--ks_component_member name="component_track_position" field="position" parent="component_track_final_particle"/>
-  <ks_component_member name="component_track_length" field="length" parent="component_track_final_particle"/-->
 
   <ks_component_group name="component_track_world">
     <component_member name="creator_name" field="creator_name" parent="track"/>
@@ -456,16 +363,17 @@ Author: Thomas Guilbaud
     <component_member name="final_kinetic_energy" field="kinetic_energy_ev" parent="component_track_final_particle"/>
   </ks_component_group>
 
-  <!-- Step -->
-  <ks_component_member name="component_step_final_particle" field="final_particle" parent="step"/>
+    <!-- Step -->
+  <!--ks_component_member name="component_step_final_particle" field="final_particle" parent="step"/-->
 
+      <!-- To track particle when using the VTK vizualisation tool -->
   <!--ks_component_group name="component_step_world">
     <component_member name="step_id" field="step_id" parent="step"/>
     <component_member name="position" field="position" parent="component_step_final_particle"/>
     <component_member name="kinetic_energy" field="kinetic_energy_ev" parent="component_step_final_particle"/>
   </ks_component_group-->
 
-  <ks_component_group name="component_step_P1">
+  <!--ks_component_group name="component_step_P1">
     <component_member name="kinetic_energy" field="kinetic_energy_ev" parent="component_step_final_particle"/>
   </ks_component_group>
   <ks_component_group name="component_step_P2">
@@ -485,7 +393,7 @@ Author: Thomas Guilbaud
   </ks_component_group>
   <ks_component_group name="component_step_P9">
     <component_member name="kinetic_energy" field="kinetic_energy_ev" parent="component_step_final_particle"/>
-  </ks_component_group>
+  </ks_component_group-->
 
 
   <!-- Structure -->
@@ -493,24 +401,22 @@ Author: Thomas Guilbaud
     <command parent="root_terminator" field="add_terminator" child="term_max_steps"/>
     <command parent="root_terminator" field="remove_terminator" child="term_world"/>
 
-    <command parent="write_root" field="add_track_output" child="component_track_world"/>
-    <!--command parent="write_root" field="remove_step_output" child="component_step_P1"/-->
-
+    <!--command parent="write_root" field="add_track_output" child="component_track_world"/-->
     <!--command parent="write_root" field="add_step_output" child="component_step_world"/-->
-    <!--command parent="write_vtk" field="set_track_point" child="component_track_position"/>
-    <command parent="write_vtk" field="set_track_data" child="component_track_length"/>
-    <command parent="write_vtk" field="set_step_point" child="component_step_position"/>
-    <command parent="write_vtk" field="set_step_data" child="component_step_length"/-->
 
-    <!-- Stop the track when reach the end of the beamline, point P9 -->
-    <!--geo_surface name="exit_beamline" surfaces="world/beamline/out_disk/exit_disk">
-      <command parent="root_terminator" field="add_terminator" child="term_exit_beamline"/>
-    </geo_surface-->
-
-    <!-- Stop track when reach the surface sample P1 -->
-    <geo_surface name="sample_beamline" spaces="world/beamline/out_disk/stop_sample_cylinder">
+    <!-- Stop track when reach the surface sample P9 (the end of the beamline) -->
+    <geo_space name="exit_detector" spaces="world/beamline/boundary/exit_cylinder">
+      <command parent="write_root" field="add_track_output" child="component_track_world"/>
+      <command parent="root_terminator" field="add_terminator" child="term_detector_beamline"/>
+    </geo_space>
+    <!-- Stop track when reach the beginning of the beamline -->
+    <geo_space name="entry_detector" spaces="world/beamline/boundary/entry_cylinder">
       <command parent="root_terminator" field="add_terminator" child="term_entry_beamline"/>
-    </geo_surface>
+    </geo_space>
+
+    <geo_space name="exit_cover_detector" spaces="world/beamline/boundary/detector_cover/#">
+      <command parent="root_terminator" field="add_terminator" child="term_cover_beamline"/>
+    </geo_space>
 
     <!-- Surface reflection of the UCN -->
     <geo_surface name="surface_reflection" surfaces="world/beamline/beamline_tube/#">
@@ -520,7 +426,7 @@ Author: Thomas Guilbaud
     <!-- Energy sample at each join of the beamline -->
     <!--geo_surface name="surface_sample_P1" surfaces="world/beamline/surface_sample/disk_sample_P1">
       <command parent="write_root" field="add_step_output" child="component_step_P1"/>
-    </geo_surface-->
+    </geo_surface>
     <geo_surface name="surface_sample_P2" surfaces="world/beamline/surface_sample/disk_sample_P2">
       <command parent="write_root" field="add_step_output" child="component_step_P2"/>
     </geo_surface>
@@ -536,17 +442,17 @@ Author: Thomas Guilbaud
     <geo_surface name="surface_sample_P8" surfaces="world/beamline/surface_sample/disk_sample_P8">
       <command parent="write_root" field="add_step_output" child="component_step_P8"/>
     </geo_surface>
-    <geo_surface name="surface_sample_P9" surfaces="world/beamline/out_disk/exit_disk">
+    <geo_surface name="surface_sample_P9" surfaces="world/beamline/surface_sample/disk_sample_P9">
       <command parent="write_root" field="add_step_output" child="component_step_P9"/>
-    </geo_surface>
+    </geo_surface-->
   </ksgeo_space>
 
 
   <!-- Simulation -->
   <ks_simulation
     run="1"
-    seed="51384"
-    events="5000"
+    seed="51390"
+    events="50000"
     space="space_world"
     generator="generator_uniform"
     trajectory="trajectory_exact"
@@ -554,7 +460,6 @@ Author: Thomas Guilbaud
     surface_navigator="nav_surface"
     terminator="term_world"
     writer="write_root"
-    writer="write_vtk"
   />
 </kassiopeia>
 
@@ -583,7 +488,7 @@ Author: Thomas Guilbaud
   <vtk_track_painter
     name="track_painter"
     path="[output_path]"
-    file="beamline_simulation_P2.root"
+    file="beamline_surface_simulation_6.root"
     point_object="component_step_world"
     point_variable="position"
     color_object="component_step_world"
