@@ -342,7 +342,7 @@ Author: Thomas Guilbaud
 
 
   <!-- Writers -->
-  <kswrite_root name="write_root" path="[output_path]" base="beamline_surface_simulation_8.root"/>
+  <kswrite_root name="write_root" path="[output_path]" base="beamline_surface_simulation_9.root"/>
   <kswrite_vtk name="write_vtk" path="[output_path]" base="beamline_simulation"/>
 
 
@@ -451,8 +451,8 @@ Author: Thomas Guilbaud
   <!-- Simulation -->
   <ks_simulation
     run="1"
-    seed="51390"
-    events="50000"
+    seed="51391"
+    events="120000"
     space="space_world"
     generator="generator_uniform"
     trajectory="trajectory_exact"
