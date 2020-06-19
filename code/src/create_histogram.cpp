@@ -8,8 +8,8 @@
 using namespace std;
 
 int main(int argc, char* argv[]) {
-  /* Function that create a file with two histograms. This is to recover the
-  initial and final energy of each track
+  /* Function that create a file with n histograms. This is to recover the
+  initial and final kinetic energy of each track.
   ex: "initial_ke", "Initial Kinetic Energy Distribution", 100 1e-11, 350e-9
   or: "final_ke", "Final Kinetic Energy Distribution", 100, 1e-11, 150e-9
   */
@@ -29,8 +29,13 @@ int main(int argc, char* argv[]) {
     return EXIT_FAILURE;
   }
 
+  // Ask update or recreate the file
+  char* status = new char[8];
+  cout << "UPDATE or RECREATE the file ? ";
+  cin >> status;
+
   // Update the file to add new histogram
-  TFile *file = new TFile(argv[1], "UPDATE");
+  TFile *file = new TFile(argv[1], status);
 
   // The variables that define the histogram
   Double_t upper_value;
@@ -40,6 +45,7 @@ int main(int argc, char* argv[]) {
   char* histogram_id = new char[15];
   int n_histograms;
 
+  // Ask the number of histograms to add
   cout << "Number of histograms: ";
   cin >> n_histograms;
 
@@ -56,10 +62,11 @@ int main(int argc, char* argv[]) {
     cout << "Upper value: ";
     cin >> upper_value;
 
+    // Create and write the histogram
     TH1F *histogram = new TH1F(histogram_id, histogram_title, n_bin, lower_value, upper_value);
-
     histogram->Write();
 
+    // Summary of the user input
     cout << "The histogram " << i+1 << " have been created with "
          << histogram_id << ", "
          << histogram_title << ", "
@@ -70,7 +77,9 @@ int main(int argc, char* argv[]) {
 
   file->Close();
 
-  cout << "The file " << argv[1] << " have been successfully created." << endl;
+  // Success message of the program
+  cout << "The file " << argv[1]
+       << " have been successfully " << status << "D." << endl;
 
   return(EXIT_SUCCESS);
 }

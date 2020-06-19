@@ -8,8 +8,8 @@
 using namespace std;
 
 int main(int argc, char* argv[]) {
-  /* Function that read ROOT files which inculde histograms
-  This histogram from the source file is added to another histogram on a target file
+  /* Function that read ROOT files which inculde histograms of interest
+  This histogram from the source file is added to another histogram in a target file
   */
 
   // The command line is empty, the user need help
@@ -35,31 +35,41 @@ int main(int argc, char* argv[]) {
   char* tree_name = new char[50];
   char* branch_name = new char[50];
 
+  // Ask the histogram's id
   cout << "Histogram's id in the target file: ";
   cin >> histogram_id;
 
   // Recover the histogram from the target file
   f_target.GetObject(histogram_id, histogram);
 
+  // Check if the histogram have the correct id
+  if (!histogram) {
+    cerr << "There is no histogram with this id." << endl;
+    return(EXIT_FAILURE);
+  }
+
+  // Ask the tree's name
   cout << "Tree name in the source file (component_track_world_DATA , component_step_world_DATA , ...): ";
   cin >> tree_name;
 
-  // Extract the data from the source file and fill the histogram of the target file
+  // Recover the tree from the file
   TFile *f_source = new TFile(argv[1], "READ");
   TTree *t_source = (TTree*)f_source->Get(tree_name);
 
   // Check if there is data in the file
   if (!t_source) {
-    std::cerr << "There is no data in the file " << argv[1]
-              << std::endl;
-    std::cerr << "Make sure that the name of the file or his content are correct."
-              << std::endl;
+    cout << "There is no data in the file " << argv[1]
+         << endl;
+    cout << "Make sure that the name of the file or his content are correct."
+         << endl;
     return(EXIT_SUCCESS);
   }
 
+  // Ask the data of interest
   cout << "Branch_name in the tree (ex: initial_kinetic_energy): ";
   cin >> branch_name;
 
+  // Extract the data from the source file and fill the histogram of the target file
   Double_t data;
   t_source->SetBranchAddress(branch_name, &data);
   Long64_t n_entries = t_source->GetEntries();
@@ -74,8 +84,9 @@ int main(int argc, char* argv[]) {
   histogram->Write(histogram_id, TObject::kOverwrite);
   f_retarget.Close();
 
-  std::cout << n_entries << " entries have been added from " << argv[1] << " to "
-            << argv[2] << std::endl;
+  // Success message of the program
+  cout << n_entries << " entries have been added from " << argv[1] << " to "
+       << argv[2] << endl;
 
   return(EXIT_SUCCESS);
 }
