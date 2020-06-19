@@ -20,7 +20,10 @@ Created the 8. June 2020
 Author: Thomas Guilbaud
 -->
 
-<define name="output_path" value="[KASPERSYS]/../../Stage 2A - UCN - 2020/UCN-Simulations/output/Beamline"/>
+<external_define name="random_seed" value="81300"/>
+<external_define name="output_file_name" value="beamline_surface_auto_simulation_1"/>
+
+<define name="output_path" value="[KASPERSYS]/../../Stage 2A - UCN - 2020/UCN-Simulations/output/Beamline/auto"/>
 <define name="log_path" value="[KASPERSYS]/../../Stage 2A - UCN - 2020/UCN-Simulations/log/Beamline"/>
 <define name="input_path" value="[KASPERSYS]/../../Stage 2A - UCN - 2020/UCN-Simulations/config/Beamline/histogram"/>
 
@@ -342,7 +345,7 @@ Author: Thomas Guilbaud
 
 
   <!-- Writers -->
-  <kswrite_root name="write_root" path="[output_path]" base="beamline_surface_simulation_12.root"/>
+  <kswrite_root name="write_root" path="[output_path]" base="[output_file_name]"/>
   <kswrite_vtk name="write_vtk" path="[output_path]" base="beamline_simulation"/>
 
 
@@ -451,8 +454,8 @@ Author: Thomas Guilbaud
   <!-- Simulation -->
   <ks_simulation
     run="1"
-    seed="51381"
-    events="15000"
+    seed="[random_seed]"
+    events="100000"
     space="space_world"
     generator="generator_uniform"
     trajectory="trajectory_exact"

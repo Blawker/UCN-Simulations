@@ -1,3 +1,8 @@
+/*
+Created the 18. June 2020
+Author: Thomas Guilbaud
+*/
+
 #include "TH1.h"
 #include "TFile.h"
 #include "TTree.h"
@@ -30,6 +35,11 @@ int main(int argc, char* argv[]) {
   // Extract the data from the target file and fill the empty histogram
   TFile f_target(argv[2], "READ");
 
+  /*if (!f_target) {
+    cerr << "The target file " << argv[2] << " doesn't exit." << endl;
+    return(EXIT_FAILURE);
+  }*/
+
   TH1F *histogram;
   char* histogram_id = new char[15];
   char* tree_name = new char[50];
@@ -52,8 +62,16 @@ int main(int argc, char* argv[]) {
   cout << "Tree name in the source file (component_track_world_DATA , component_step_world_DATA , ...): ";
   cin >> tree_name;
 
-  // Recover the tree from the file
+  // Open the source file
   TFile *f_source = new TFile(argv[1], "READ");
+
+  // Check if the source file exist
+  if (!f_source) {
+    cerr << "The source file " << argv[1] << " doesn't exit." << endl;
+    return(EXIT_FAILURE);
+  }
+
+  // Get the tree in the source file
   TTree *t_source = (TTree*)f_source->Get(tree_name);
 
   // Check if there is data in the file

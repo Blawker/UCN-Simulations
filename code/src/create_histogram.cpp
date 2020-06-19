@@ -1,8 +1,12 @@
+/*
+Created the 18. June 2020
+Author: Thomas Guilbaud
+*/
+
 #include "TH1.h"
 #include "TFile.h"
 #include "TROOT.h"
 
-//#include <cstdlib>
 #include <iostream>
 
 using namespace std;
@@ -36,6 +40,11 @@ int main(int argc, char* argv[]) {
 
   // Update the file to add new histogram
   TFile *file = new TFile(argv[1], status);
+
+  if (!file) {
+    cerr << "The file " << argv[1] << " doesn't exit." << endl;
+    return(EXIT_FAILURE);
+  }
 
   // The variables that define the histogram
   Double_t upper_value;
