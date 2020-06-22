@@ -3,6 +3,7 @@ Simulations of ultracold neutrons using Kassiopeia particle tracking framework:
 *https://github.com/KATRIN-Experiment/Kassiopeia*
 
 ## First project: Beamline
-- Initialize the geometry of a beamline structure for UCN
-- Adding surface reflection for stainless steel
-- Adding binary program to create and merge output file into histograms
+- Initialize the geometry of a beamline structure for UCN.
+- Adding surface reflection for stainless steel.
+- Adding binary program to create and merge output file into histograms.
+- Adding Shell script to merge and automate simulations and output writing.

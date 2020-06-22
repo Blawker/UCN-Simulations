@@ -18,6 +18,8 @@
 <!--
 Created the 8. June 2020
 Author: Thomas Guilbaud
+Version: 1.0
+First version of the config file of the beamline.
 -->
 
 <define name="output_path" value="[KASPERSYS]/../../Stage 2A - UCN - 2020/UCN-Simulations/output/Beamline"/>

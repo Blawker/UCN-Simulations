@@ -16,10 +16,15 @@
 -->
 
 <!--
-Created the 8. June 2020
+Created the 19. June 2020
 Author: Thomas Guilbaud
+Version: 2.1
+Modified beamline_surface.xml to include input from the command line. This config
+file can be automate with differenet seed and different output file.
 -->
 
+<!-- Input for the command line, use for example:
+      Kassiopeia.app/ config_file.xml -r random_seed=81300 output_file_name=out.root -->
 <external_define name="random_seed" value="81300"/>
 <external_define name="output_file_name" value="beamline_surface_auto_simulation_1"/>
 

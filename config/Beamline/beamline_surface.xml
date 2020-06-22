@@ -16,8 +16,12 @@
 -->
 
 <!--
-Created the 8. June 2020
+Created the 17. June 2020
 Author: Thomas Guilbaud
+Version: 2.0
+Modified beamline.xml. This config file use only the inner surface of the beamline.
+This file is a V2.0 of the previous one. The output command only save the track
+when a neutron reach the top of the beamline.
 -->
 
 <define name="output_path" value="[KASPERSYS]/../../Stage 2A - UCN - 2020/UCN-Simulations/output/Beamline"/>
@@ -342,7 +346,7 @@ Author: Thomas Guilbaud
 
 
   <!-- Writers -->
-  <kswrite_root name="write_root" path="[output_path]" base="beamline_surface_simulation_12.root"/>
+  <kswrite_root name="write_root" path="[output_path]" base="beamline_surface_simulation_13.root"/>
   <kswrite_vtk name="write_vtk" path="[output_path]" base="beamline_simulation"/>
 
 
