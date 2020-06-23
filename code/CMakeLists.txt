@@ -25,9 +25,13 @@ SET( CMAKE_CXX_FLAGS "-std=c++11" )
 
 # Create the executables
 ADD_EXECUTABLE( create_histogram src/create_histogram.cpp )
-target_link_libraries(create_histogram ${ROOT_LIBRARIES})
 ADD_EXECUTABLE( add_histogram src/add_histogram.cpp )
+ADD_EXECUTABLE( convertCsvToRoot src/convertCsvToRoot.cpp )
+
+# Link the Root libraries
+target_link_libraries(create_histogram ${ROOT_LIBRARIES})
 target_link_libraries(add_histogram ${ROOT_LIBRARIES})
+target_link_libraries(convertCsvToRoot ${ROOT_LIBRARIES})
 
 # Talking make
 set( CAMKE_VERBOSE_MAKEFILE off )

@@ -144,6 +144,19 @@ add_histogram/fast:
 .PHONY : add_histogram/fast
 
 #=============================================================================
+# Target rules for targets named convertCsvToRoot
+
+# Build rule for target.
+convertCsvToRoot: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 convertCsvToRoot
+.PHONY : convertCsvToRoot
+
+# fast build rule for target.
+convertCsvToRoot/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/convertCsvToRoot.dir/build.make CMakeFiles/convertCsvToRoot.dir/build
+.PHONY : convertCsvToRoot/fast
+
+#=============================================================================
 # Target rules for targets named create_histogram
 
 # Build rule for target.
@@ -183,6 +196,33 @@ src/add_histogram.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/add_histogram.dir/build.make CMakeFiles/add_histogram.dir/src/add_histogram.cpp.s
 .PHONY : src/add_histogram.cpp.s
 
+src/convertCsvToRoot.o: src/convertCsvToRoot.cpp.o
+
+.PHONY : src/convertCsvToRoot.o
+
+# target to build an object file
+src/convertCsvToRoot.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/convertCsvToRoot.dir/build.make CMakeFiles/convertCsvToRoot.dir/src/convertCsvToRoot.cpp.o
+.PHONY : src/convertCsvToRoot.cpp.o
+
+src/convertCsvToRoot.i: src/convertCsvToRoot.cpp.i
+
+.PHONY : src/convertCsvToRoot.i
+
+# target to preprocess a source file
+src/convertCsvToRoot.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/convertCsvToRoot.dir/build.make CMakeFiles/convertCsvToRoot.dir/src/convertCsvToRoot.cpp.i
+.PHONY : src/convertCsvToRoot.cpp.i
+
+src/convertCsvToRoot.s: src/convertCsvToRoot.cpp.s
+
+.PHONY : src/convertCsvToRoot.s
+
+# target to generate assembly for a file
+src/convertCsvToRoot.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/convertCsvToRoot.dir/build.make CMakeFiles/convertCsvToRoot.dir/src/convertCsvToRoot.cpp.s
+.PHONY : src/convertCsvToRoot.cpp.s
+
 src/create_histogram.o: src/create_histogram.cpp.o
 
 .PHONY : src/create_histogram.o
@@ -219,10 +259,14 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... add_histogram"
+	@echo "... convertCsvToRoot"
 	@echo "... create_histogram"
 	@echo "... src/add_histogram.o"
 	@echo "... src/add_histogram.i"
 	@echo "... src/add_histogram.s"
+	@echo "... src/convertCsvToRoot.o"
+	@echo "... src/convertCsvToRoot.i"
+	@echo "... src/convertCsvToRoot.s"
 	@echo "... src/create_histogram.o"
 	@echo "... src/create_histogram.i"
 	@echo "... src/create_histogram.s"

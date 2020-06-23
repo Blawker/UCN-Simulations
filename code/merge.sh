@@ -1,6 +1,7 @@
 #!/bin/bash
-path_merge_file=../output/test_output.root
-path_output_file=../output/Beamline/surface/
+# Must be executed in UCN-Simulations/code/
+path_merge_file=../output/Beamline/merge/beamline_surface_TRIGA_merge.root
+path_output_file=../output/Beamline/triga/
 read -p "Make new histogram in $path_merge_file ? [Y / N] " -n 1 isNewFile
 echo -e "\n"
 if [ $isNewFile == "Y" ]

@@ -22,7 +22,7 @@ int main(int argc, char* argv[]) {
   if (argc == 1) {
     cout << "Usage: "
          << argv[0]
-         << " path/name_source_file number_of_histograms"
+         << " path/name_source_file"
          << endl;
     return EXIT_SUCCESS;
   }
