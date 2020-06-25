@@ -11,6 +11,7 @@ if [ $isNewRun == "Y" ]
 then
   for i in `seq 1 5`;
   do
+    clear
     ./bin/Kassiopeia.app/Contents/MacOS/Kassiopeia ./../../Stage\ 2A\ -\ UCN\ -\ 2020/UCN-Simulations/config/Beamline/beamline_surface_auto.xml -r random_seed=$seed$i output_file_name=$output_file$i$ext
   done
 fi

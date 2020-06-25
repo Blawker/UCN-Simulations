@@ -131,19 +131,6 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named add_histogram
-
-# Build rule for target.
-add_histogram: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 add_histogram
-.PHONY : add_histogram
-
-# fast build rule for target.
-add_histogram/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/add_histogram.dir/build.make CMakeFiles/add_histogram.dir/build
-.PHONY : add_histogram/fast
-
-#=============================================================================
 # Target rules for targets named convertCsvToRoot
 
 # Build rule for target.
@@ -157,44 +144,57 @@ convertCsvToRoot/fast:
 .PHONY : convertCsvToRoot/fast
 
 #=============================================================================
-# Target rules for targets named create_histogram
+# Target rules for targets named addHistogram
 
 # Build rule for target.
-create_histogram: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 create_histogram
-.PHONY : create_histogram
+addHistogram: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 addHistogram
+.PHONY : addHistogram
 
 # fast build rule for target.
-create_histogram/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/create_histogram.dir/build.make CMakeFiles/create_histogram.dir/build
-.PHONY : create_histogram/fast
+addHistogram/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/addHistogram.dir/build.make CMakeFiles/addHistogram.dir/build
+.PHONY : addHistogram/fast
 
-src/add_histogram.o: src/add_histogram.cpp.o
+#=============================================================================
+# Target rules for targets named createHistogram
 
-.PHONY : src/add_histogram.o
+# Build rule for target.
+createHistogram: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 createHistogram
+.PHONY : createHistogram
+
+# fast build rule for target.
+createHistogram/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/createHistogram.dir/build.make CMakeFiles/createHistogram.dir/build
+.PHONY : createHistogram/fast
+
+src/addHistogram.o: src/addHistogram.cpp.o
+
+.PHONY : src/addHistogram.o
 
 # target to build an object file
-src/add_histogram.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/add_histogram.dir/build.make CMakeFiles/add_histogram.dir/src/add_histogram.cpp.o
-.PHONY : src/add_histogram.cpp.o
+src/addHistogram.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/addHistogram.dir/build.make CMakeFiles/addHistogram.dir/src/addHistogram.cpp.o
+.PHONY : src/addHistogram.cpp.o
 
-src/add_histogram.i: src/add_histogram.cpp.i
+src/addHistogram.i: src/addHistogram.cpp.i
 
-.PHONY : src/add_histogram.i
+.PHONY : src/addHistogram.i
 
 # target to preprocess a source file
-src/add_histogram.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/add_histogram.dir/build.make CMakeFiles/add_histogram.dir/src/add_histogram.cpp.i
-.PHONY : src/add_histogram.cpp.i
+src/addHistogram.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/addHistogram.dir/build.make CMakeFiles/addHistogram.dir/src/addHistogram.cpp.i
+.PHONY : src/addHistogram.cpp.i
 
-src/add_histogram.s: src/add_histogram.cpp.s
+src/addHistogram.s: src/addHistogram.cpp.s
 
-.PHONY : src/add_histogram.s
+.PHONY : src/addHistogram.s
 
 # target to generate assembly for a file
-src/add_histogram.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/add_histogram.dir/build.make CMakeFiles/add_histogram.dir/src/add_histogram.cpp.s
-.PHONY : src/add_histogram.cpp.s
+src/addHistogram.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/addHistogram.dir/build.make CMakeFiles/addHistogram.dir/src/addHistogram.cpp.s
+.PHONY : src/addHistogram.cpp.s
 
 src/convertCsvToRoot.o: src/convertCsvToRoot.cpp.o
 
@@ -223,32 +223,32 @@ src/convertCsvToRoot.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/convertCsvToRoot.dir/build.make CMakeFiles/convertCsvToRoot.dir/src/convertCsvToRoot.cpp.s
 .PHONY : src/convertCsvToRoot.cpp.s
 
-src/create_histogram.o: src/create_histogram.cpp.o
+src/createHistogram.o: src/createHistogram.cpp.o
 
-.PHONY : src/create_histogram.o
+.PHONY : src/createHistogram.o
 
 # target to build an object file
-src/create_histogram.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/create_histogram.dir/build.make CMakeFiles/create_histogram.dir/src/create_histogram.cpp.o
-.PHONY : src/create_histogram.cpp.o
+src/createHistogram.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/createHistogram.dir/build.make CMakeFiles/createHistogram.dir/src/createHistogram.cpp.o
+.PHONY : src/createHistogram.cpp.o
 
-src/create_histogram.i: src/create_histogram.cpp.i
+src/createHistogram.i: src/createHistogram.cpp.i
 
-.PHONY : src/create_histogram.i
+.PHONY : src/createHistogram.i
 
 # target to preprocess a source file
-src/create_histogram.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/create_histogram.dir/build.make CMakeFiles/create_histogram.dir/src/create_histogram.cpp.i
-.PHONY : src/create_histogram.cpp.i
+src/createHistogram.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/createHistogram.dir/build.make CMakeFiles/createHistogram.dir/src/createHistogram.cpp.i
+.PHONY : src/createHistogram.cpp.i
 
-src/create_histogram.s: src/create_histogram.cpp.s
+src/createHistogram.s: src/createHistogram.cpp.s
 
-.PHONY : src/create_histogram.s
+.PHONY : src/createHistogram.s
 
 # target to generate assembly for a file
-src/create_histogram.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/create_histogram.dir/build.make CMakeFiles/create_histogram.dir/src/create_histogram.cpp.s
-.PHONY : src/create_histogram.cpp.s
+src/createHistogram.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/createHistogram.dir/build.make CMakeFiles/createHistogram.dir/src/createHistogram.cpp.s
+.PHONY : src/createHistogram.cpp.s
 
 # Help Target
 help:
@@ -258,18 +258,18 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
-	@echo "... add_histogram"
+	@echo "... addHistogram"
 	@echo "... convertCsvToRoot"
-	@echo "... create_histogram"
-	@echo "... src/add_histogram.o"
-	@echo "... src/add_histogram.i"
-	@echo "... src/add_histogram.s"
+	@echo "... createHistogram"
+	@echo "... src/addHistogram.o"
+	@echo "... src/addHistogram.i"
+	@echo "... src/addHistogram.s"
 	@echo "... src/convertCsvToRoot.o"
 	@echo "... src/convertCsvToRoot.i"
 	@echo "... src/convertCsvToRoot.s"
-	@echo "... src/create_histogram.o"
-	@echo "... src/create_histogram.i"
-	@echo "... src/create_histogram.s"
+	@echo "... src/createHistogram.o"
+	@echo "... src/createHistogram.i"
+	@echo "... src/createHistogram.s"
 .PHONY : help
 
 

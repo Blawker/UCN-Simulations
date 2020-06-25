@@ -61,6 +61,7 @@ surface interaction with UCN.
   <!-- World -->
   <cylinder_space name="world_space" z1="-0.1" z2="0.1" r="0.1"/>
 
+  <!-- Definition of Basic Shape -->
   <tag name="cylinder_tag">
     <cylinder_surface name="cylinder_surface" z1="-0.05" z2="0.05" r="0.05"/>
   </tag>
@@ -87,12 +88,14 @@ surface interaction with UCN.
     </surface>
   </space>
 
+  <!-- World Assembly -->
   <space name="world" node="world_space">
     <space name="piston" tree="piston_assembly">
       <transformation rotation_euler="90. 90. 0."/>
     </space>
   </space>
 
+  <!-- Appearance -->
   <appearance name="app_moving_mirror" color="255 127 0 127" arc="4096" surfaces="world/piston/moving_mirror"/>
 
 </geometry>
@@ -169,7 +172,7 @@ surface interaction with UCN.
     correlation_length="20.e-9"
     theta="90."
     phi="0."
-    value_formula="0.5*(1 + TMath::Cos(2*x))"
+    value_formula="0.5*(1 - TMath::Cos(2*x))"
   /-->
 
 

@@ -6,8 +6,8 @@ read -p "Make new histogram in $path_merge_file ? [Y / N] " -n 1 isNewFile
 echo -e "\n"
 if [ $isNewFile == "Y" ]
 then
-  echo Execute create_histogram
-  ./bin/Release/create_histogram $path_merge_file <<EOF
+  echo Execute createHistogram
+  ./bin/Release/createHistogram $path_merge_file <<EOF
   RECREATE
   2
   Initial_kinetic_energy_distribution
@@ -22,19 +22,19 @@ then
   130e-9
 EOF
 fi
-echo Execute add_histogram for initial kinetic energy
+echo Execute addHistogram for initial kinetic energy
 for file in `ls $path_output_file`;
 do
-  ./bin/Release/add_histogram $path_output_file$file $path_merge_file <<EOF
+  ./bin/Release/addHistogram $path_output_file$file $path_merge_file <<EOF
   hist_initial_ke
   component_track_world_DATA
   initial_kinetic_energy
 EOF
 done
-echo Execute add_histogram for final kinetic energy
+echo Execute addHistogram for final kinetic energy
 for file in `ls $path_output_file`;
 do
-  ./bin/Release/add_histogram $path_output_file$file $path_merge_file <<EOF
+  ./bin/Release/addHistogram $path_output_file$file $path_merge_file <<EOF
   hist_final_ke
   component_track_world_DATA
   final_kinetic_energy
