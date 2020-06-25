@@ -1,0 +1,282 @@
+<!--
+<define name="sim_dir_name" value="Excercise2"/>
+<define name="simbase_dir" value="/Users/christianschmidt/Uni/tSPECT/Simulation/Internship_Guilbaud"/>
+-->
+<!--define name="cache_dir" value="[simbase_dir]/KEMFieldCache"/-->
+<!--
+<external_define name="output_dir" value="[simbase_dir]/[sim_dir_name]/output"/>
+<external_define name="input_dir" value="[simbase_dir]/[sim_dir_name]/input"/>
+-->
+<!--define name="geometry_dir" value="[simbase_dir]/tSPECTGeometry"/-->
+
+<!--
+<define name="output_path" value="[output_dir]"/>
+<define name="log_path" value="[output_dir]"/>
+<define name="input_path" value="[input_dir]"/>
+-->
+
+<!--
+Created the 24. June 2020
+Author: Thomas Guilbaud
+Version: 1.0
+Created the beta version of a moving mirror. Test the modified source code for
+new component that include moving part (surfaces, spaces, assembly, ...) and
+surface interaction with UCN.
+-->
+
+<define name="output_path" value="[KASPERSYS]/../../Stage 2A - UCN - 2020/UCN-Simulations/output/Piston"/>
+<define name="log_path" value="[KASPERSYS]/../../Stage 2A - UCN - 2020/UCN-Simulations/log/Piston"/>
+<define name="input_path" value="[KASPERSYS]/../../Stage 2A - UCN - 2020/UCN-Simulations/config/Spectrum"/>
+
+
+<messages>
+  <file path="[log_path]" base="Beamline_log.txt"/>
+
+  <message key="k_file" terminal="normal" log="warning"/>
+  <message key="k_initialization" terminal="normal" log="warning"/>
+
+  <message key="kg_core" terminal="normal" log="warning"/>
+  <message key="kg_shape" terminal="normal" log="warning"/>
+  <message key="kg_mesh" terminal="normal" log="warning"/>
+  <message key="kg_axial_mesh" terminal="normal" log="warning"/>
+
+  <!--message key="ks_object" terminal="normal" log="normal"/-->
+  <message key="ks_operator" terminal="normal" log="normal"/>
+  <message key="ks_field" terminal="normal" log="normal"/>
+  <message key="ks_geometry" terminal="normal" log="normal"/>
+  <message key="ks_generator" terminal="normal" log="normal"/>
+  <message key="ks_trajectory" terminal="debug" log="normal"/>
+  <message key="ks_interaction" terminal="debug" log="normal"/>
+  <message key="ks_navigator" terminal="debug" log="normal"/>
+  <message key="ks_terminator" terminal="normal" log="normal"/>
+  <message key="ks_writer" terminal="normal" log="normal"/>
+  <message key="ks_main" terminal="normal" log="normal"/>
+  <message key="ks_run" terminal="normal" log="normal"/>
+  <message key="ks_event" terminal="normal" log="normal"/>
+  <message key="ks_track" terminal="normal" log="normal"/>
+  <message key="ks_step" terminal="debug" log="normal"/>
+</messages>
+
+<geometry>
+  <!-- World -->
+  <cylinder_space name="world_space" z1="-0.1" z2="0.1" r="0.1"/>
+
+  <tag name="cylinder_tag">
+    <cylinder_surface name="cylinder_surface" z1="-0.05" z2="0.05" r="0.05"/>
+  </tag>
+
+  <tag name="disk_tag">
+    <disk_surface name="disk_surface" z="0." r="0.05"/>
+  </tag>
+
+  <!-- Fix Mirror Assembly-->
+  <space name="fix_mirror_assembly">
+    <surface name="fix_cylinder" node="cylinder_surface"/>
+    <surface name="fix_disk" node="disk_surface">
+      <transformation displacement="0. 0. -0.05"/>
+    </surface>
+  </space>
+
+  <!-- Piston Assembly -->
+  <space name="piston_assembly">
+    <!-- Fix Parts -->
+    <space name="fix_mirror" tree="fix_mirror_assembly"/>
+    <!-- Moving Part -->
+    <surface name="moving_mirror" node="disk_surface">
+      <transformation displacement="0. 0. 0.05"/>
+    </surface>
+  </space>
+
+  <space name="world" node="world_space">
+    <space name="piston" tree="piston_assembly">
+      <transformation rotation_euler="90. 90. 0."/>
+    </space>
+  </space>
+
+  <appearance name="app_moving_mirror" color="255 127 0 127" arc="4096" surfaces="world/piston/moving_mirror"/>
+
+</geometry>
+
+
+<kassiopeia>
+
+  <!-- Generator -->
+  <define name="T" value="3.e-3"/> <!-- Temperature in K -->
+  <define name="k" value="1.38e-23"/> <!-- Boltzmann Constant -->
+  <define name="e" value="1.602e-19"/> <!-- Coulomb charge -->
+  <define name="beta" value="{[k]*[T]/[e]}"/>
+  <ksgen_generator_composite name="generator_uniform" pid="2112">
+    <energy_composite>
+      <!-- Boltzmann distribution of the energy of UCN -->
+      <energy_fix value="180.e-9"/>
+      <!--energy_formula value_min="1.30e-7" value_max="3.2e-7"
+                      value_formula="2*TMath::Sqrt(x/TMath::Pi())*(1/([beta]*[e]))^(3/2)*exp(-x/[beta])"/-->
+      <!--energy_histogram path="[input_path]"
+        base="triga_neutron_spectrum.root" histogram="hke_triga"/-->
+    </energy_composite>
+    <position_rectangular_composite>
+      <x_fix value="0."/>
+      <y_fix value="0."/>
+      <z_fix value="0."/>
+    </position_rectangular_composite>
+    <time_composite>
+      <time_fix value="0."/>
+    </time_composite>
+    <direction_spherical_composite>
+      <theta_spherical angle_min="0." angle_max="180."/>
+      <phi_uniform value_min="0." value_max="360."/>
+    </direction_spherical_composite>
+  </ksgen_generator_composite>
+
+
+  <!-- Trajectories -->
+  <kstraj_trajectory_exact name="trajectory_exact">
+    <interpolator_fast name="interpolator_fast"/>
+    <integrator_rk86 name="integrator_rk86"/>
+    <term_propagation name="term_propagation"/>
+    <term_gravity name="term_gravity" gravity="0. 0. -9.8"/>
+    <control_time name="control_time" time="1.e-5"/>
+  </kstraj_trajectory_exact>
+
+  <!-- Space Navigators -->
+  <ksnav_space name="nav_space" enter_split="false" exit_split="false"/>
+
+  <!-- Surface Navigators -->
+  <ksnav_surface name="nav_surface" transmission_split="false" reflection_split="false"/>
+
+
+  <!-- Interactions -->
+    <!-- Surface Reflection Interaction for Stainless Steel -->
+    <!--  eta: loss per bounce,                          alpha: spin depolarization,
+          real_optical_potential: fermi potential (eV),  correlation_length: roughness (m) -->
+  <ksint_surface_UCN name="int_surface_UCN"
+    eta="2.e-4"
+    alpha="5.e-6"
+    real_optical_potential="2.08e-7"
+    correlation_length="20.e-9"/>
+
+  <!-- To Do: Set interaction of UCN on moving surfaces -->
+    <!-- Surface Reflection Interaction for moving Stainless Steel along the x-axis -->
+    <!--  eta: loss per bounce,                          alpha: spin depolarization,
+          real_optical_potential: fermi potential (eV),  correlation_length: roughness (m)
+          theta & phi: spherical angle, direction along the moving part (°)
+          value_formula: equation to describe the motion of the moving mirror (m)
+      -->
+  <!--ksint_moving_surface_UCN name="int_moving_surface_UCN"
+    eta="2.e-4"
+    alpha="5.e-6"
+    real_optical_potential="2.08e-9"
+    correlation_length="20.e-9"
+    theta="90."
+    phi="0."
+    value_formula="0.5*(1 + TMath::Cos(2*x))"
+  /-->
+
+
+  <!-- Terminators -->
+  <ksterm_death name="term_world"/>
+  <ksterm_max_steps name="term_max_steps" steps="100000"/>
+
+
+  <!-- Writers -->
+  <kswrite_root name="write_root" path="[output_path]" base="piston_simulation_test_1.root"/>
+  <kswrite_vtk name="write_vtk" path="[output_path]" base="piston_simulation"/>
+
+
+  <!-- Outputs -->
+    <!-- Track -->
+  <ks_component_member name="component_track_initial_particle" field="initial_particle" parent="track"/>
+  <ks_component_member name="component_track_final_particle" field="final_particle" parent="track"/>
+
+  <ks_component_group name="component_track_world">
+    <component_member name="creator_name" field="creator_name" parent="track"/>
+    <component_member name="terminator_name" field="terminator_name" parent="track"/>
+    <component_member name="total_steps" field="total_steps" parent="track"/>
+    <component_member name="initial_time" field="time" parent="component_track_initial_particle"/>
+    <component_member name="initial_position" field="position" parent="component_track_initial_particle"/>
+    <component_member name="initial_kinetic_energy" field="kinetic_energy_ev" parent="component_track_initial_particle"/>
+    <component_member name="final_time" field="time" parent="component_track_final_particle"/>
+    <component_member name="final_position" field="position" parent="component_track_final_particle"/>
+    <component_member name="final_kinetic_energy" field="kinetic_energy_ev" parent="component_track_final_particle"/>
+  </ks_component_group>
+
+    <!-- Step -->
+  <ks_component_member name="component_step_final_particle" field="final_particle" parent="step"/>
+
+      <!-- To track particle when using the VTK vizualisation tool -->
+  <ks_component_group name="component_step_world">
+    <component_member name="step_id" field="step_id" parent="step"/>
+    <component_member name="position" field="position" parent="component_step_final_particle"/>
+    <component_member name="kinetic_energy" field="kinetic_energy_ev" parent="component_step_final_particle"/>
+  </ks_component_group>
+
+
+  <!-- Structure -->
+  <ksgeo_space name="space_world" spaces="world">
+    <command parent="root_terminator" field="add_terminator" child="term_max_steps"/>
+    <command parent="root_terminator" field="remove_terminator" child="term_world"/>
+
+    <command parent="write_root" field="add_track_output" child="component_track_world"/>
+    <command parent="write_root" field="add_step_output" child="component_step_world"/>
+
+    <!-- Surface reflection of the UCN on fix mirror -->
+    <geo_surface name="surface_reflection" surfaces="world/piston/fix_mirror/#">
+      <command parent="root_surface_interaction" field="set_surface_interaction" child="int_surface_UCN"/>
+    </geo_surface>
+
+    <!-- Surface reflection of the UCN on moving mirror -->
+    <!-- To Do: add surface command -->
+    <!--geo_surface name="moving_surface_reflection" surfaces="world/piston/moving_mirror">
+      <command parent="root_surface_interaction" field="set_surface_interaction" child="int_moving_surface_UCN"/>
+    </geo_surface-->
+
+  </ksgeo_space>
+
+
+  <!-- Simulation -->
+  <ks_simulation
+    run="1"
+    seed="51389"
+    events="1"
+    space="space_world"
+    generator="generator_uniform"
+    trajectory="trajectory_exact"
+    space_navigator="nav_space"
+    surface_navigator="nav_surface"
+    terminator="term_world"
+    writer="write_root"
+  />
+</kassiopeia>
+
+
+<vtk_window
+  name="vtk_window"
+  enable_display="true"
+  enable_write="true"
+  frame_title="KGeoBag Visualization"
+  frame_size_x="1024"
+  frame_size_y="768"
+  frame_color_red=".2"
+  frame_color_green=".2"
+  frame_color_blue=".2"
+  view_angle="45"
+  eye_angle="0.5"
+  multi_samples="4"
+  depth_peeling="10"
+>
+  <vtk_geometry_painter
+    name="geometry_painter"
+    path="[output_path]"
+    file="piston_geometry.vtp"
+    surfaces="world/piston/#"
+  />
+  <vtk_track_painter
+    name="track_painter"
+    path="[output_path]"
+    file="piston_simulation_test_1.root"
+    point_object="component_step_world"
+    point_variable="position"
+    color_object="component_step_world"
+    color_variable="kinetic_energy"
+  />
+</vtk_window>

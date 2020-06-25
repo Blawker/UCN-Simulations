@@ -24,9 +24,9 @@ This file is a V2.0 of the previous one. The output command only save the track
 when a neutron reach the top of the beamline.
 -->
 
-<define name="output_path" value="[KASPERSYS]/../../Stage 2A - UCN - 2020/UCN-Simulations/output/Beamline"/>
+<define name="output_path" value="[KASPERSYS]/../../Stage 2A - UCN - 2020/UCN-Simulations/output/Beamline/triga"/>
 <define name="log_path" value="[KASPERSYS]/../../Stage 2A - UCN - 2020/UCN-Simulations/log/Beamline"/>
-<define name="input_path" value="[KASPERSYS]/../../Stage 2A - UCN - 2020/UCN-Simulations/config/Beamline/histogram"/>
+<define name="input_path" value="[KASPERSYS]/../../Stage 2A - UCN - 2020/UCN-Simulations/config/Spectrum"/>
 
 
 <messages>
@@ -290,10 +290,10 @@ when a neutron reach the top of the beamline.
   <ksgen_generator_composite name="generator_uniform" pid="2112">
     <energy_composite>
       <!-- Boltzmann distribution of the energy of UCN -->
-      <energy_formula value_min="1.30e-7" value_max="3.2e-7"
-                      value_formula="2*TMath::Sqrt(x/TMath::Pi())*(1/([beta]*[e]))^(3/2)*exp(-x/[beta])"/>
-      <!--energy_histogram path="[input_path]"
-        base="beamline_spectrum_P1.root" histogram="hke_P1"/-->
+      <!--energy_formula value_min="1.30e-7" value_max="3.2e-7"
+                      value_formula="2*TMath::Sqrt(x/TMath::Pi())*(1/([beta]*[e]))^(3/2)*exp(-x/[beta])"/-->
+      <energy_histogram path="[input_path]"
+        base="triga_neutron_spectrum.root" histogram="hke_triga"/>
     </energy_composite>
     <position_rectangular_composite surface="world/beamline/boundary/entry_disk"> <!-- Initial position at the origin, entry of the beamline -->
       <x_gauss value_min="{-[inner_diameter]/2+0.001}" value_max="{[inner_diameter]/2-0.001}" value_mean="0." value_sigma=".01"/>
@@ -346,7 +346,7 @@ when a neutron reach the top of the beamline.
 
 
   <!-- Writers -->
-  <kswrite_root name="write_root" path="[output_path]" base="beamline_surface_simulation_13.root"/>
+  <kswrite_root name="write_root" path="[output_path]" base="beamline_surface_simulation_triga_10.root"/>
   <kswrite_vtk name="write_vtk" path="[output_path]" base="beamline_simulation"/>
 
 
@@ -455,8 +455,8 @@ when a neutron reach the top of the beamline.
   <!-- Simulation -->
   <ks_simulation
     run="1"
-    seed="51381"
-    events="15000"
+    seed="51390"
+    events="100000"
     space="space_world"
     generator="generator_uniform"
     trajectory="trajectory_exact"
