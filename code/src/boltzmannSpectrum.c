@@ -63,8 +63,10 @@ Double_t fit_function(Double_t *x, Double_t *par) {
   // Fit with a Maxwell-Boltzmann distribution; Parameters[0: temperature T, 1: Normalized Constant]
   Double_t k = 1.38e-23; // Boltzmann constant
   Double_t e = 1.602e-19; // Coulomb charge in J
-  Double_t T = 2.e-3; // Temperature in K
-  Double_t fitval = par[0]*TMath::Power(2*TMath::Sqrt(x[0]*e/TMath::Pi())*(1/(k*T)), 3/2) * exp(-x[0]*e/(k*T));
+  Double_t T = 5.13e-3; // Temperature in K
+  Double_t fitval = par[0]*2*TMath::Sqrt(x[0]*e/TMath::Pi())*TMath::Power(1/(k*T), 3/2) * exp(-x[0]*e/(k*T));
+  //Double_t a = TMath::Sqrt(2/TMath::Pi())*2*exp(-1)/(1.113793*1.e6);
+  //Double_t fitval = 1.e7*TMath::Sqrt(2/TMath::Pi())*(x[0]*x[0]*exp(-x[0]*x[0]/(2*par[0]*par[0])))/(par[0]*par[0]*par[0]);
   return(fitval);
 }
 
@@ -72,10 +74,10 @@ void simulation_extraction() {
   // https://root.cern.ch/root/html/tutorials/tree/tree1.C.html
 
   Double_t k = 1.38e-23; // Boltzmann constant
-  Double_t T = 30; // Temperature in K
+  Double_t T = 2.e-3; // Temperature in K
   Double_t e = 1.602e-19; // Coulomb charge in J
-  Double_t upper_energy = 200.e-9; // in eV
-  Double_t lower_energy = 1.e-11; // in eV
+  Double_t upper_energy = 2000.e-9; // in eV
+  Double_t lower_energy = 55.e-9; // in eV
 
   TCanvas *canvas_1 = new TCanvas("c1", "Boltzmann Distribution");
 
@@ -83,40 +85,47 @@ void simulation_extraction() {
 
   //note that we use "new" to create the TFile and TTree objects !
   //because we want to keep these objects alive when we leave this function.
-  TFile *f = new TFile("../../../output/Beamline/beamline_simulation_P1.root");
-  TTree *t1 = (TTree*)f->Get("component_step_P1_DATA");
-  Double_t ke;
-  t1->SetBranchAddress("kinetic_energy",&ke);
+  TFile *f = new TFile("../config/Spectrum/triga_neutron_spectrum.root");
+  //TTree *t1 = (TTree*)f->Get("component_step_P1_DATA");
+  //Double_t ke;
+  //t1->SetBranchAddress("kinetic_energy",&ke);
 
   //create one histogram
-  TH1F *hke = new TH1F("hke_P1", "Kinetic Energy Distribution", 100, lower_energy, upper_energy);
+  //TH1F *hke = new TH1F("hke_P1", "Kinetic Energy Distribution", 100, lower_energy, upper_energy);
+  TH1F* histogram;
+
+  f->GetObject("hke_triga", histogram);
+
+  //Double_t norm = 1.;
+  //histogram->Scale(norm, "width");
 
   //read all entries and fill the histograms
-  Long64_t n_entries = t1->GetEntries();
+  /*Long64_t n_entries = t1->GetEntries();
   for (Long64_t i=0; i<n_entries; i++) {
     t1->GetEntry(i);
     hke->Fill(ke);
   }
-  hke->DrawClone();
+  hke->DrawClone();*/
 
   /* - Create a new ROOT file for output
   - Note that this file may contain any kind of ROOT objects, histograms,
   pictures, graphics objects etc.
   - the new file is now becoming the current directory */
-  TFile *file_1 = new TFile("../histogram/beamline_spectrum_P1.root","RECREATE","boltzmann_spectrum");
+  /*TFile *file_1 = new TFile("../histogram/beamline_spectrum_P1.root","RECREATE","boltzmann_spectrum");
   // write Histogram to current directory (i.e. the file just opened)
   hke->Write();
   // Close the file.
   // (You may inspect your histogram in the file using the TBrowser class)
   file_1->Close();
-  //canvas_1->Draw();
+  //canvas_1->Draw();*/
 
   // Fit
-  /*TF1 *func = new TF1("fit",fit_function, lower_energy, upper_energy, 1);
-  func->SetParameters(0, 50);
+  TF1 *func = new TF1("fit",fit_function, lower_energy, upper_energy, 1);
+  func->SetParameters(0, 1.);
+  //func->SetParameters(1, 1.);
   //func->SetParameters(1, 1);
   func->SetParNames("Normalized Const");
-  hke->Fit(func, "R");*/
+  histogram->Fit(func, "R");
   //hke->DrawClone();
 
   // Results
@@ -138,6 +147,8 @@ void simulation_extraction() {
   // in the browser, click on "ROOT Files", then on "tree1.root".
   //     you can click on the histogram icons in the right panel to draw them.
   // in the TreeViewer, follow the instructions in the Help button.
+
+  //f->Close();
 }
 
 

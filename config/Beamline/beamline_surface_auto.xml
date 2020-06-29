@@ -33,7 +33,7 @@ file can be automate with differenet seed and different output file.
 <define name="input_path" value="[KASPERSYS]/../../Stage 2A - UCN - 2020/UCN-Simulations/config/Spectrum"/>
 
 
-<messages>
+<!--messages>
   <file path="[log_path]" base="Beamline_log.txt"/>
 
   <message key="k_file" terminal="normal" log="warning"/>
@@ -44,7 +44,7 @@ file can be automate with differenet seed and different output file.
   <message key="kg_mesh" terminal="normal" log="warning"/>
   <message key="kg_axial_mesh" terminal="normal" log="warning"/>
 
-  <!--message key="ks_object" terminal="normal" log="normal"/-->
+  <message key="ks_object" terminal="normal" log="normal"/>
   <message key="ks_operator" terminal="normal" log="normal"/>
   <message key="ks_field" terminal="normal" log="normal"/>
   <message key="ks_geometry" terminal="normal" log="normal"/>
@@ -59,7 +59,7 @@ file can be automate with differenet seed and different output file.
   <message key="ks_event" terminal="normal" log="normal"/>
   <message key="ks_track" terminal="normal" log="normal"/>
   <message key="ks_step" terminal="debug" log="normal"/>
-</messages>
+</messages-->
 
 <geometry>
   <!-- Major Parameters of the Beamline -->
@@ -297,7 +297,7 @@ file can be automate with differenet seed and different output file.
       <!--energy_formula value_min="1.30e-7" value_max="3.2e-7"
                       value_formula="2*TMath::Sqrt(x/TMath::Pi())*(1/([beta]*[e]))^(3/2)*exp(-x/[beta])"/-->
       <energy_histogram path="[input_path]"
-        base="triga_neutron_spectrum.root" histogram="hke_triga"/>
+        base="triga_neutron_spectrum_3.root" histogram="hke_triga"/>
     </energy_composite>
     <position_rectangular_composite surface="world/beamline/boundary/entry_disk"> <!-- Initial position at the origin, entry of the beamline -->
       <x_gauss value_min="{-[inner_diameter]/2+0.001}" value_max="{[inner_diameter]/2-0.001}" value_mean="0." value_sigma=".01"/>

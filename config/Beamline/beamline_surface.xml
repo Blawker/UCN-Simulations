@@ -24,12 +24,12 @@ This file is a V2.0 of the previous one. The output command only save the track
 when a neutron reach the top of the beamline.
 -->
 
-<define name="output_path" value="[KASPERSYS]/../../Stage 2A - UCN - 2020/UCN-Simulations/output/Beamline/triga"/>
+<define name="output_path" value="[KASPERSYS]/../../Stage 2A - UCN - 2020/UCN-Simulations/output/Beamline/auto"/>
 <define name="log_path" value="[KASPERSYS]/../../Stage 2A - UCN - 2020/UCN-Simulations/log/Beamline"/>
 <define name="input_path" value="[KASPERSYS]/../../Stage 2A - UCN - 2020/UCN-Simulations/config/Spectrum"/>
 
 
-<messages>
+<!--messages>
   <file path="[log_path]" base="Beamline_log.txt"/>
 
   <message key="k_file" terminal="normal" log="warning"/>
@@ -40,7 +40,7 @@ when a neutron reach the top of the beamline.
   <message key="kg_mesh" terminal="normal" log="warning"/>
   <message key="kg_axial_mesh" terminal="normal" log="warning"/>
 
-  <!--message key="ks_object" terminal="normal" log="normal"/-->
+  <message key="ks_object" terminal="normal" log="normal"/>
   <message key="ks_operator" terminal="normal" log="normal"/>
   <message key="ks_field" terminal="normal" log="normal"/>
   <message key="ks_geometry" terminal="normal" log="normal"/>
@@ -55,7 +55,7 @@ when a neutron reach the top of the beamline.
   <message key="ks_event" terminal="normal" log="normal"/>
   <message key="ks_track" terminal="normal" log="normal"/>
   <message key="ks_step" terminal="debug" log="normal"/>
-</messages>
+</messages-->
 
 <geometry>
   <!-- Major Parameters of the Beamline -->
@@ -283,7 +283,7 @@ when a neutron reach the top of the beamline.
 <kassiopeia>
 
   <!-- Generator -->
-  <define name="T" value="3.e-3"/> <!-- Temperature in K -->
+  <define name="T" value="5.13e-3"/> <!-- Temperature in K -->
   <define name="k" value="1.38e-23"/> <!-- Boltzmann Constant -->
   <define name="e" value="1.602e-19"/> <!-- Coulomb charge -->
   <define name="beta" value="{[k]*[T]/[e]}"/>
@@ -293,7 +293,7 @@ when a neutron reach the top of the beamline.
       <!--energy_formula value_min="1.30e-7" value_max="3.2e-7"
                       value_formula="2*TMath::Sqrt(x/TMath::Pi())*(1/([beta]*[e]))^(3/2)*exp(-x/[beta])"/-->
       <energy_histogram path="[input_path]"
-        base="triga_neutron_spectrum.root" histogram="hke_triga"/>
+        base="triga_neutron_spectrum_3.root" histogram="hke_triga"/>
     </energy_composite>
     <position_rectangular_composite surface="world/beamline/boundary/entry_disk"> <!-- Initial position at the origin, entry of the beamline -->
       <x_gauss value_min="{-[inner_diameter]/2+0.001}" value_max="{[inner_diameter]/2-0.001}" value_mean="0." value_sigma=".01"/>
@@ -346,7 +346,7 @@ when a neutron reach the top of the beamline.
 
 
   <!-- Writers -->
-  <kswrite_root name="write_root" path="[output_path]" base="beamline_surface_simulation_triga_10.root"/>
+  <kswrite_root name="write_root" path="[output_path]" base="beamline_surface_simulation_triga_15.root"/>
   <kswrite_vtk name="write_vtk" path="[output_path]" base="beamline_simulation"/>
 
 
@@ -455,8 +455,8 @@ when a neutron reach the top of the beamline.
   <!-- Simulation -->
   <ks_simulation
     run="1"
-    seed="51390"
-    events="100000"
+    seed="51395"
+    events="1000"
     space="space_world"
     generator="generator_uniform"
     trajectory="trajectory_exact"
