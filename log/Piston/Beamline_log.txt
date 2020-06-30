@@ -1,0 +1,16 @@
+[32;1m[KSMAIN NORMAL MESSAGE] ☻   welcome to Kassiopeia 3.7.0  ☻ [0m
+[32;1m****[KSRUN NORMAL MESSAGE] processing run 0 ...[0m
+[32;1m********[KSEVENT NORMAL MESSAGE] processing event 0 <generator_uniform> ...[0m
+[32;1m************[KSTRACK NORMAL MESSAGE] processing track 0 <generator_uniform> ...[0m
+[32;1m****************[KSSTEP NORMAL MESSAGE] processing step 0 ... (z = 0, r = 0, k = 1.8e-07, e = 1.8e-07)[0m[32;1m[KSNAVIGATOR NORMAL MESSAGE]   child surface <surface_reflection> was crossed[0m
+[32;1m[KSNAVIGATOR NORMAL MESSAGE]   reflection occurred on child surface <surface_reflection>[0m
+[32;1m****************[KSSTEP NORMAL MESSAGE] processing step 1000 ... (z = 0.0435832, r = 0.0208808, k = 1.75535e-07, e = 1.75535e-07)[0m[32;1m****************[KSSTEP NORMAL MESSAGE] processing step 2000 ... (z = -0.00470627, r = 0.0495307, k = 1.80483e-07, e = 1.80483e-07)[0m[32;1m****************[KSSTEP NORMAL MESSAGE] processing step 3000 ... (z = -0.0539757, r = 0.0813475, k = 1.8553e-07, e = 1.8553e-07)[0m[32;1m[KSNAVIGATOR NORMAL MESSAGE]   parent space <space_world> was exited[0m
+[32;1m************[KSTRACK NORMAL MESSAGE] ...completed track 0 <term_world> after 3578 steps at <0.0994084 -0.0108613 -0.0828743>[0m
+[32;1m********[KSEVENT NORMAL MESSAGE] ...completed event 0 <generator_uniform>  in 1 s (ca. 0 s left)[0m
+[32;1m****[KSRUN NORMAL MESSAGE] ...run 0 complete[0m
+[32;1m[KSMAIN NORMAL MESSAGE] finished![0m
+[32;1m[KSWRITER NORMAL MESSAGE] ROOT output was written to file </Users/Thomas_Guilbaud/Documents/Kassiopeia/Kasper_build/../../Stage 2A - UCN - 2020/UCN-Simulations/output/Piston/piston_simulation_test_1.root>[0m
+[32;1m[GEOVIS NORMAL MESSAGE] vtk geometry painter <geometry_painter> is writing <4240> cells to file </Users/Thomas_Guilbaud/Documents/Kassiopeia/Kasper_build/../../Stage 2A - UCN - 2020/UCN-Simulations/output/Piston/piston_geometry.vtp>[0m
+[32;1m[KSVISUALIZATION NORMAL MESSAGE] vtk track painter <track_painter> is writing <1> cells to file </Users/Thomas_Guilbaud/Documents/Kassiopeia/Kasper_build/../../Stage 2A - UCN - 2020/UCN-Simulations/output/Piston/track_painter.vtp>[0m
+[33;1m[INITIALIZATION WARNING MESSAGE] It took 144762 ms to process the file <../../Stage 2A - UCN - 2020/UCN-Simulations/config/Piston/piston_test.xml>[0m
+[32;1m[KSMAIN NORMAL MESSAGE] ...finished[0m

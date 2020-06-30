@@ -39,7 +39,7 @@ KSIntMovingSurfaceUCN* KSIntMovingSurfaceUCN::Clone() const
 KSIntMovingSurfaceUCN::~KSIntMovingSurfaceUCN() {}
 
 void KSIntMovingSurfaceUCN::ExecuteInteraction(const KSParticle& anInitialParticle, KSParticle& aFinalParticle,
-                                         KSParticleQueue& aQueue)
+                                               KSParticleQueue& aQueue)
 {
     KThreeVector tNormal;
     if (anInitialParticle.GetCurrentSurface() != nullptr) {
@@ -71,9 +71,10 @@ void KSIntMovingSurfaceUCN::ExecuteInteraction(const KSParticle& anInitialPartic
     return;
 }
 void KSIntMovingSurfaceUCN::ExecuteReflection(const KSParticle& anInitialParticle, KSParticle& aFinalParticle,
-                                        KSParticleQueue&)
+                                              KSParticleQueue&)
 {
     KThreeVector tNormal;
+    // Access to the normal of surface
     if (anInitialParticle.GetCurrentSurface() != nullptr) {
         tNormal = anInitialParticle.GetCurrentSurface()->Normal(anInitialParticle.GetPosition());
     }
@@ -85,11 +86,36 @@ void KSIntMovingSurfaceUCN::ExecuteReflection(const KSParticle& anInitialParticl
                        << "> was given a particle with neither a surface nor a side set" << eom;
         return;
     }
+
+    // Get the momentum of the particle and the moving surface
     KThreeVector tInitialMomentum = anInitialParticle.GetMomentum();
+
+    // Set the direction
+    KThreeVector tMovingMomentum(sin(fTheta) * cos(fPhi),
+                                 sin(fTheta) * sin(fPhi),
+                                 cos(fTheta) );
+
+    // Set magnitude
+    double tTimeValue = anInitialParticle.GetTime();
+    double tMovingMomentumMagnitude = fValueFormula.Derivative(tTimeValue, 0.001);
+    tMovingMomentum.SetMagnitude(tMovingMomentumMagnitude);
+
+    // Add the MovingMomentum to the initial momentum of the particle
+    tInitialMomentum += tMovingMomentum;
+
+    // Decompose the modified momentum of the particle
     KThreeVector tInitialNormalMomentum = tInitialMomentum.Dot(tNormal) * tNormal;
     KThreeVector tInitialTangentMomentum = tInitialMomentum - tInitialNormalMomentum;
     KThreeVector tInitialOrthogonalMomentum = tInitialTangentMomentum.Cross(tInitialNormalMomentum.Unit());
 
+    // Decompose the component of the moving surface
+    /*
+    KThreeVector tMovingNormalMomentum = tMovingMomentum.Dot(tNormal) * tNormal;
+    KThreeVector tMovingTangentMomentum = tMovingMomentum - tMovingNormalMomentum;
+    KThreeVector tMovingOrthogonalMomentum = tMovingTangentMomentum.Cross(tMovingNormalMomentum.Unit());
+    */
+
+    // Spin variables
     KThreeVector tSpin = anInitialParticle.GetSpin();
     double tAlignedSpin = anInitialParticle.GetAlignedSpin();
     double tSpinAngle = anInitialParticle.GetSpinAngle();
@@ -113,8 +139,7 @@ void KSIntMovingSurfaceUCN::ExecuteReflection(const KSParticle& anInitialParticl
         }
     }
 
-    // calculate the new reflection direction
-
+    // Calculate the new reflection direction
     double k = tInitialMomentum.Magnitude() / katrin::KConst::Hbar();
     double cosThetaIn = tInitialNormalMomentum.Magnitude() / tInitialMomentum.Magnitude();
     double sinThetaIn = tInitialTangentMomentum.Magnitude() / tInitialMomentum.Magnitude();
@@ -143,11 +168,11 @@ void KSIntMovingSurfaceUCN::ExecuteReflection(const KSParticle& anInitialParticl
         tInitialMomentum.Magnitude() * tInitialTangentMomentum.Unit() * sin(thetaOut) * cos(phiOut) +
         tInitialMomentum.Magnitude() * tInitialOrthogonalMomentum.Unit() * sin(thetaOut) * sin(phiOut);
 
+    // Update the state of the particle
     aFinalParticle = anInitialParticle;
     aFinalParticle.SetMomentum(tFinalMomentum);
 
-    // spin changes need to happen after SetMomentum to make Spin0 correct
-
+    // Spin changes need to happen after SetMomentum to make Spin0 correct
     aFinalParticle.SetInitialSpin(tSpin);
     aFinalParticle.SetAlignedSpin(tAlignedSpin);
     aFinalParticle.SetSpinAngle(tSpinAngle);
@@ -155,7 +180,7 @@ void KSIntMovingSurfaceUCN::ExecuteReflection(const KSParticle& anInitialParticl
     return;
 }
 void KSIntMovingSurfaceUCN::ExecuteTransmission(const KSParticle& anInitialParticle, KSParticle& aFinalParticle,
-                                          KSParticleQueue&)
+                                                KSParticleQueue&)
 {
     aFinalParticle = anInitialParticle;
     return;
