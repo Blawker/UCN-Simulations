@@ -16,10 +16,17 @@ KSIntMovingSurfaceUCN::KSIntMovingSurfaceUCN() :
     fCorrelationLength(0.),
     fTheta(0.),
     fPhi(0.),
-    fValueFormula(0.),
+    fMass(0.),
+    fValueFormula("x"),
+    fValueMin(0.),
+    fValueMax(0.),
     fTanThetaIn(0.),
-    fExpThetaCoef(0.)
-{}
+    fExpThetaCoef(0.),
+    fValueFunction(nullptr)
+{
+  fValueFunction = new TF1("function", fValueFormula.c_str(), fValueMin, fValueMax);
+  return;
+}
 KSIntMovingSurfaceUCN::KSIntMovingSurfaceUCN(const KSIntMovingSurfaceUCN& aCopy) :
     KSComponent(),
     fEta(aCopy.fEta),
@@ -28,10 +35,17 @@ KSIntMovingSurfaceUCN::KSIntMovingSurfaceUCN(const KSIntMovingSurfaceUCN& aCopy)
     fCorrelationLength(aCopy.fCorrelationLength),
     fTheta(aCopy.fTheta),
     fPhi(aCopy.fPhi),
+    fMass(aCopy.fMass),
     fValueFormula(aCopy.fValueFormula),
+    fValueMin(aCopy.fValueMin),
+    fValueMax(aCopy.fValueMax),
     fTanThetaIn(aCopy.fTanThetaIn),
-    fExpThetaCoef(aCopy.fExpThetaCoef)
-{}
+    fExpThetaCoef(aCopy.fExpThetaCoef),
+    fValueFunction(nullptr)
+{
+  fValueFunction = new TF1("function", fValueFormula.c_str(), fValueMin, fValueMax);
+  return;
+}
 KSIntMovingSurfaceUCN* KSIntMovingSurfaceUCN::Clone() const
 {
     return new KSIntMovingSurfaceUCN(*this);
@@ -91,29 +105,24 @@ void KSIntMovingSurfaceUCN::ExecuteReflection(const KSParticle& anInitialParticl
     KThreeVector tInitialMomentum = anInitialParticle.GetMomentum();
 
     // Set the direction
+    fTheta *= katrin::KConst::Pi()/180;
+    fPhi *= katrin::KConst::Pi()/180;
     KThreeVector tMovingMomentum(sin(fTheta) * cos(fPhi),
                                  sin(fTheta) * sin(fPhi),
                                  cos(fTheta) );
 
     // Set magnitude
     double tTimeValue = anInitialParticle.GetTime();
-    double tMovingMomentumMagnitude = fValueFormula.Derivative(tTimeValue, 0.001);
+    double tMovingMomentumMagnitude = fMass * fValueFunction->Derivative(tTimeValue, 0, 0.001);
     tMovingMomentum.SetMagnitude(tMovingMomentumMagnitude);
 
     // Add the MovingMomentum to the initial momentum of the particle
-    tInitialMomentum += tMovingMomentum;
+    tInitialMomentum -= tMovingMomentum;
 
     // Decompose the modified momentum of the particle
     KThreeVector tInitialNormalMomentum = tInitialMomentum.Dot(tNormal) * tNormal;
     KThreeVector tInitialTangentMomentum = tInitialMomentum - tInitialNormalMomentum;
     KThreeVector tInitialOrthogonalMomentum = tInitialTangentMomentum.Cross(tInitialNormalMomentum.Unit());
-
-    // Decompose the component of the moving surface
-    /*
-    KThreeVector tMovingNormalMomentum = tMovingMomentum.Dot(tNormal) * tNormal;
-    KThreeVector tMovingTangentMomentum = tMovingMomentum - tMovingNormalMomentum;
-    KThreeVector tMovingOrthogonalMomentum = tMovingTangentMomentum.Cross(tMovingNormalMomentum.Unit());
-    */
 
     // Spin variables
     KThreeVector tSpin = anInitialParticle.GetSpin();
@@ -156,7 +165,7 @@ void KSIntMovingSurfaceUCN::ExecuteReflection(const KSParticle& anInitialParticl
     double tValue = KRandom::GetInstance().Uniform(tValueMin, tValueMax);
     fSolver.Solve(KMathBracketingSolver::eBrent,
                   this,
-                  &KSIntSurfaceUCN::ValueFunction,
+                  &KSIntMovingSurfaceUCN::ValueFunction,
                   tValue,
                   -thetaIn,
                   katrin::KConst::Pi() / 2 - thetaIn,

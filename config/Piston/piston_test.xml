@@ -111,7 +111,7 @@ surface interaction with UCN.
   <ksgen_generator_composite name="generator_uniform" pid="2112">
     <energy_composite>
       <!-- Boltzmann distribution of the energy of UCN -->
-      <energy_fix value="180.e-9"/>
+      <energy_fix value="140.e-9"/>
       <!--energy_formula value_min="1.30e-7" value_max="3.2e-7"
                       value_formula="2*TMath::Sqrt(x/TMath::Pi())*(1/([beta]*[e]))^(3/2)*exp(-x/[beta])"/-->
       <!--energy_histogram path="[input_path]"
@@ -158,27 +158,28 @@ surface interaction with UCN.
     real_optical_potential="2.08e-7"
     correlation_length="20.e-9"/>
 
-  <!-- To Do: Set interaction of UCN on moving surfaces -->
     <!-- Surface Reflection Interaction for moving Stainless Steel along the x-axis -->
     <!--  eta: loss per bounce,                          alpha: spin depolarization,
           real_optical_potential: fermi potential (eV),  correlation_length: roughness (m)
           theta & phi: spherical angle, direction along the moving part (°)
           value_formula: equation to describe the motion of the moving mirror (m)
+          mass: mass of the moving part (kg)
       -->
-  <!--ksint_moving_surface_UCN name="int_moving_surface_UCN"
+  <ksint_moving_surface_UCN name="int_moving_surface_UCN"
     eta="2.e-4"
     alpha="5.e-6"
-    real_optical_potential="2.08e-9"
+    real_optical_potential="2.08e-7"
     correlation_length="20.e-9"
     theta="90."
     phi="0."
-    value_formula="0.5*(1 - TMath::Cos(2*x))"
-  /-->
+    mass="1.e-27"
+    value_formula="0.1*0.5*(1 - TMath::Cos(2*TMath::Pi()*1*x))" value_min="0." value_max="1."
+  />
 
 
   <!-- Terminators -->
   <ksterm_death name="term_world"/>
-  <ksterm_max_steps name="term_max_steps" steps="100000"/>
+  <ksterm_max_steps name="term_max_steps" steps="1000000"/>
 
 
   <!-- Writers -->
@@ -210,6 +211,7 @@ surface interaction with UCN.
   <ks_component_group name="component_step_world">
     <component_member name="step_id" field="step_id" parent="step"/>
     <component_member name="position" field="position" parent="component_step_final_particle"/>
+    <component_member name="time" field="time" parent="component_step_final_particle"/>
     <component_member name="kinetic_energy" field="kinetic_energy_ev" parent="component_step_final_particle"/>
   </ks_component_group>
 
@@ -228,10 +230,9 @@ surface interaction with UCN.
     </geo_surface>
 
     <!-- Surface reflection of the UCN on moving mirror -->
-    <!-- To Do: add surface command -->
-    <!--geo_surface name="moving_surface_reflection" surfaces="world/piston/moving_mirror">
+    <geo_surface name="moving_surface_reflection" surfaces="world/piston/moving_mirror">
       <command parent="root_surface_interaction" field="set_surface_interaction" child="int_moving_surface_UCN"/>
-    </geo_surface-->
+    </geo_surface>
 
   </ksgeo_space>
 
@@ -239,7 +240,7 @@ surface interaction with UCN.
   <!-- Simulation -->
   <ks_simulation
     run="1"
-    seed="51389"
+    seed="51388"
     events="1"
     space="space_world"
     generator="generator_uniform"
