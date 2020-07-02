@@ -173,7 +173,7 @@ surface interaction with UCN.
     theta="90."
     phi="0."
     mass="1.e-27"
-    value_formula="0.1*0.5*(1 - TMath::Cos(2*TMath::Pi()*1*x))" value_min="0." value_max="1."
+    value_formula="x+0.05" value_min="0." value_max="1."
   />
 
 
