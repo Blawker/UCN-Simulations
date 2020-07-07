@@ -28,7 +28,7 @@ file can be automate with differenet seed and different output file.
 <external_define name="random_seed" value="81300"/>
 <external_define name="output_file_name" value="beamline_surface_auto_simulation_triga_1.root"/>
 
-<define name="output_path" value="[KASPERSYS]/../../Stage 2A - UCN - 2020/UCN-Simulations/output/Beamline/auto"/>
+<define name="output_path" value="[KASPERSYS]/../../Stage 2A - UCN - 2020/UCN-Simulations/output/Beamline/auto_parallel"/>
 <define name="log_path" value="[KASPERSYS]/../../Stage 2A - UCN - 2020/UCN-Simulations/log/Beamline"/>
 <define name="input_path" value="[KASPERSYS]/../../Stage 2A - UCN - 2020/UCN-Simulations/config/Spectrum"/>
 
@@ -147,7 +147,7 @@ file can be automate with differenet seed and different output file.
 
   <!-- Cylinder Space -->
   <tag name="cylinder_tag">
-    <cylinder_space name="cylinder_space" r="{[inner_diameter]/2}" z1="0.001" z2="0.05"/>
+    <cylinder_space name="cylinder_space" r="{[inner_diameter]/2}" z1="0." z2="0.05"/>
   </tag>
 
   <!-- Detector Cover Space -->
@@ -263,6 +263,9 @@ file can be automate with differenet seed and different output file.
     <!--space name="surface_sample" tree="disk_sample_assembly">
       <transformation rotation_euler="0. 90. 0."/>
     </space-->
+    <space name="spectrometer" node="cylinder_space">
+      <transformation rotation_euler="90. 90. 0."/>
+    </space>
     <space name="boundary" tree="boundary_assembly">
       <transformation rotation_euler="0. 90. 0."/>
     </space>
@@ -287,7 +290,7 @@ file can be automate with differenet seed and different output file.
 <kassiopeia>
 
   <!-- Generator -->
-  <define name="T" value="3.e-3"/> <!-- Temperature in K -->
+  <define name="T" value="5.13e-3"/> <!-- Temperature in K -->
   <define name="k" value="1.38e-23"/> <!-- Boltzmann Constant -->
   <define name="e" value="1.602e-19"/> <!-- Coulomb charge -->
   <define name="beta" value="{[k]*[T]/[e]}"/>
@@ -297,12 +300,12 @@ file can be automate with differenet seed and different output file.
       <!--energy_formula value_min="1.30e-7" value_max="3.2e-7"
                       value_formula="2*TMath::Sqrt(x/TMath::Pi())*(1/([beta]*[e]))^(3/2)*exp(-x/[beta])"/-->
       <energy_histogram path="[input_path]"
-        base="triga_neutron_spectrum_3.root" histogram="hke_triga"/>
+        base="triga_neutron_spectrum_gr.root" histogram="hke_triga"/>
     </energy_composite>
-    <position_rectangular_composite surface="world/beamline/boundary/entry_disk"> <!-- Initial position at the origin, entry of the beamline -->
-      <x_gauss value_min="{-[inner_diameter]/2+0.001}" value_max="{[inner_diameter]/2-0.001}" value_mean="0." value_sigma=".01"/>
-      <y_gauss value_min="{-[inner_diameter]/2+0.001}" value_max="{[inner_diameter]/2-0.001}" value_mean="0." value_sigma=".01"/>
-      <z_fix value="0.01"/>
+    <position_rectangular_composite> <!-- Initial position at the origin, entry of the beamline -->
+      <x_fix value="0.01"/>
+      <y_uniform value_min="{-[inner_diameter]/2+0.001}" value_max="{[inner_diameter]/2-0.001}"/>
+      <z_uniform value_min="{-[inner_diameter]/2+0.001}" value_max="{[inner_diameter]/2-0.001}"/>
     </position_rectangular_composite>
     <time_composite>
       <time_fix value="0."/>
@@ -346,7 +349,10 @@ file can be automate with differenet seed and different output file.
   <ksterm_death name="term_entry_beamline"/>
   <ksterm_death name="term_cover_beamline"/>
   <ksterm_death name="term_detector_beamline"/>
-  <ksterm_max_steps name="term_max_steps" steps="100000000"/>
+  <ksterm_min_energy name="term_min_energy" energy="130e-9"/>
+  <!--ksterm_min_z name="term_min_z" z="{-[outer_diameter]}"/-->
+  <!--ksterm_max_z name="term_max_z" z="{[outer_diameter]}"/-->
+  <ksterm_max_steps name="term_max_steps" steps="10000000"/>
 
 
   <!-- Writers -->
@@ -356,68 +362,68 @@ file can be automate with differenet seed and different output file.
 
   <!-- Outputs -->
     <!-- Track -->
-  <ks_component_member name="component_track_initial_particle" field="initial_particle" parent="track"/>
-  <ks_component_member name="component_track_final_particle" field="final_particle" parent="track"/>
+    <ks_component_member name="component_track_initial_particle" field="initial_particle" parent="track"/>
+    <ks_component_member name="component_track_final_particle" field="final_particle" parent="track"/>
 
-  <ks_component_group name="component_track_world">
-    <component_member name="creator_name" field="creator_name" parent="track"/>
-    <component_member name="terminator_name" field="terminator_name" parent="track"/>
-    <component_member name="total_steps" field="total_steps" parent="track"/>
-    <component_member name="initial_time" field="time" parent="component_track_initial_particle"/>
-    <component_member name="initial_position" field="position" parent="component_track_initial_particle"/>
-    <component_member name="initial_kinetic_energy" field="kinetic_energy_ev" parent="component_track_initial_particle"/>
-    <component_member name="final_time" field="time" parent="component_track_final_particle"/>
-    <component_member name="final_position" field="position" parent="component_track_final_particle"/>
-    <component_member name="final_kinetic_energy" field="kinetic_energy_ev" parent="component_track_final_particle"/>
-  </ks_component_group>
+    <ks_component_group name="component_track_world_success">
+      <component_member name="creator_name" field="creator_name" parent="track"/>
+      <component_member name="terminator_name" field="terminator_name" parent="track"/>
+      <component_member name="total_steps" field="total_steps" parent="track"/>
+      <component_member name="initial_time" field="time" parent="component_track_initial_particle"/>
+      <component_member name="initial_position" field="position" parent="component_track_initial_particle"/>
+      <component_member name="initial_kinetic_energy" field="kinetic_energy_ev" parent="component_track_initial_particle"/>
+      <component_member name="final_time" field="time" parent="component_track_final_particle"/>
+      <component_member name="final_position" field="position" parent="component_track_final_particle"/>
+      <component_member name="final_kinetic_energy" field="kinetic_energy_ev" parent="component_track_final_particle"/>
+    </ks_component_group>
+
+    <ks_component_group name="component_track_world_Emin">
+      <component_member name="creator_name" field="creator_name" parent="track"/>
+      <component_member name="terminator_name" field="terminator_name" parent="track"/>
+      <component_member name="total_steps" field="total_steps" parent="track"/>
+      <component_member name="initial_time" field="time" parent="component_track_initial_particle"/>
+      <component_member name="initial_position" field="position" parent="component_track_initial_particle"/>
+      <component_member name="initial_kinetic_energy" field="kinetic_energy_ev" parent="component_track_initial_particle"/>
+      <component_member name="final_time" field="time" parent="component_track_final_particle"/>
+      <component_member name="final_position" field="position" parent="component_track_final_particle"/>
+      <component_member name="final_kinetic_energy" field="kinetic_energy_ev" parent="component_track_final_particle"/>
+    </ks_component_group>
+
+    <ks_component_group name="component_track_world">
+      <component_member name="creator_name" field="creator_name" parent="track"/>
+      <component_member name="terminator_name" field="terminator_name" parent="track"/>
+      <component_member name="total_steps" field="total_steps" parent="track"/>
+      <component_member name="initial_time" field="time" parent="component_track_initial_particle"/>
+      <component_member name="initial_position" field="position" parent="component_track_initial_particle"/>
+      <component_member name="initial_kinetic_energy" field="kinetic_energy_ev" parent="component_track_initial_particle"/>
+      <component_member name="final_time" field="time" parent="component_track_final_particle"/>
+      <component_member name="final_position" field="position" parent="component_track_final_particle"/>
+      <component_member name="final_kinetic_energy" field="kinetic_energy_ev" parent="component_track_final_particle"/>
+    </ks_component_group>
 
     <!-- Step -->
-  <!--ks_component_member name="component_step_final_particle" field="final_particle" parent="step"/-->
-
-      <!-- To track particle when using the VTK vizualisation tool -->
-  <!--ks_component_group name="component_step_world">
-    <component_member name="step_id" field="step_id" parent="step"/>
-    <component_member name="position" field="position" parent="component_step_final_particle"/>
-    <component_member name="kinetic_energy" field="kinetic_energy_ev" parent="component_step_final_particle"/>
-  </ks_component_group-->
-
-  <!--ks_component_group name="component_step_P1">
-    <component_member name="kinetic_energy" field="kinetic_energy_ev" parent="component_step_final_particle"/>
-  </ks_component_group>
-  <ks_component_group name="component_step_P2">
-    <component_member name="kinetic_energy" field="kinetic_energy_ev" parent="component_step_final_particle"/>
-  </ks_component_group>
-  <ks_component_group name="component_step_P3">
-    <component_member name="kinetic_energy" field="kinetic_energy_ev" parent="component_step_final_particle"/>
-  </ks_component_group>
-  <ks_component_group name="component_step_P5">
-    <component_member name="kinetic_energy" field="kinetic_energy_ev" parent="component_step_final_particle"/>
-  </ks_component_group>
-  <ks_component_group name="component_step_P6">
-    <component_member name="kinetic_energy" field="kinetic_energy_ev" parent="component_step_final_particle"/>
-  </ks_component_group>
-  <ks_component_group name="component_step_P8">
-    <component_member name="kinetic_energy" field="kinetic_energy_ev" parent="component_step_final_particle"/>
-  </ks_component_group>
-  <ks_component_group name="component_step_P9">
-    <component_member name="kinetic_energy" field="kinetic_energy_ev" parent="component_step_final_particle"/>
-  </ks_component_group-->
-
 
   <!-- Structure -->
   <ksgeo_space name="space_world" spaces="world">
     <command parent="root_terminator" field="add_terminator" child="term_max_steps"/>
     <command parent="root_terminator" field="remove_terminator" child="term_world"/>
 
-    <!--command parent="write_root" field="add_track_output" child="component_track_world"/-->
+    <command parent="write_root" field="add_track_output" child="component_track_world"/>
     <!--command parent="write_root" field="add_step_output" child="component_step_world"/-->
+
+    <!-- Stop and save the track because not enough at the initial time -->
+    <geo_space name="not_enough_initial_ke" spaces="world/beamline/spectrometer">
+      <command parent="root_terminator" field="add_terminator" child="term_min_energy"/>
+      <command parent="write_root" field="add_track_output" child="component_track_world_Emin"/>
+    </geo_space>
 
     <!-- Stop track when reach the surface sample P9 (the end of the beamline) -->
     <geo_space name="exit_detector" spaces="world/beamline/boundary/exit_cylinder">
-      <command parent="write_root" field="add_track_output" child="component_track_world"/>
       <command parent="root_terminator" field="add_terminator" child="term_detector_beamline"/>
+      <command parent="write_root" field="add_track_output" child="component_track_world_success"/>
     </geo_space>
-    <!-- Stop track when reach the beginning of the beamline -->
+
+    <!-- Stop track when reach the entry of the beamline -->
     <geo_space name="entry_detector" spaces="world/beamline/boundary/entry_cylinder">
       <command parent="root_terminator" field="add_terminator" child="term_entry_beamline"/>
     </geo_space>
@@ -430,29 +436,6 @@ file can be automate with differenet seed and different output file.
     <geo_surface name="surface_reflection" surfaces="world/beamline/beamline_tube/#">
       <command parent="root_surface_interaction" field="set_surface_interaction" child="int_surface_UCN"/>
     </geo_surface>
-
-    <!-- Energy sample at each join of the beamline -->
-    <!--geo_surface name="surface_sample_P1" surfaces="world/beamline/surface_sample/disk_sample_P1">
-      <command parent="write_root" field="add_step_output" child="component_step_P1"/>
-    </geo_surface>
-    <geo_surface name="surface_sample_P2" surfaces="world/beamline/surface_sample/disk_sample_P2">
-      <command parent="write_root" field="add_step_output" child="component_step_P2"/>
-    </geo_surface>
-    <geo_surface name="surface_sample_P3" surfaces="world/beamline/surface_sample/disk_sample_P3">
-      <command parent="write_root" field="add_step_output" child="component_step_P3"/>
-    </geo_surface>
-    <geo_surface name="surface_sample_P5" surfaces="world/beamline/surface_sample/disk_sample_P5">
-      <command parent="write_root" field="add_step_output" child="component_step_P5"/>
-    </geo_surface>
-    <geo_surface name="surface_sample_P6" surfaces="world/beamline/surface_sample/disk_sample_P6">
-      <command parent="write_root" field="add_step_output" child="component_step_P6"/>
-    </geo_surface>
-    <geo_surface name="surface_sample_P8" surfaces="world/beamline/surface_sample/disk_sample_P8">
-      <command parent="write_root" field="add_step_output" child="component_step_P8"/>
-    </geo_surface>
-    <geo_surface name="surface_sample_P9" surfaces="world/beamline/surface_sample/disk_sample_P9">
-      <command parent="write_root" field="add_step_output" child="component_step_P9"/>
-    </geo_surface-->
   </ksgeo_space>
 
 
@@ -470,36 +453,3 @@ file can be automate with differenet seed and different output file.
     writer="write_root"
   />
 </kassiopeia>
-
-
-<!--vtk_window
-  name="vtk_window"
-  enable_display="true"
-  enable_write="true"
-  frame_title="KGeoBag Visualization"
-  frame_size_x="1024"
-  frame_size_y="768"
-  frame_color_red=".2"
-  frame_color_green=".2"
-  frame_color_blue=".2"
-  view_angle="45"
-  eye_angle="0.5"
-  multi_samples="4"
-  depth_peeling="10"
->
-  <vtk_geometry_painter
-    name="geometry_painter"
-    path="[output_path]"
-    file="beamline_geometry.vtp"
-    surfaces="world/beamline/#"
-  />
-  <vtk_track_painter
-    name="track_painter"
-    path="[output_path]"
-    file="beamline_surface_simulation_6.root"
-    point_object="component_step_world"
-    point_variable="position"
-    color_object="component_step_world"
-    color_variable="kinetic_energy"
-  />
-</vtk_window-->

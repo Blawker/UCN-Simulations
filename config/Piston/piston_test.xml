@@ -138,7 +138,7 @@ surface interaction with UCN.
     <integrator_rk86 name="integrator_rk86"/>
     <term_propagation name="term_propagation"/>
     <term_gravity name="term_gravity" gravity="0. 0. -9.8"/>
-    <control_time name="control_time" time="1.e-5"/>
+    <control_time name="control_time" time="1.e-6"/>
   </kstraj_trajectory_exact>
 
   <!-- Space Navigators -->
@@ -172,14 +172,14 @@ surface interaction with UCN.
     correlation_length="20.e-9"
     theta="90."
     phi="0."
-    mass="1.e-27"
-    value_formula="x+0.05" value_min="0." value_max="1."
+    mass="1.675e-27"
+    value_formula="-0.01*TMath::Cos(100*x)+0.05" value_min="0.04" value_max="0.06"
   />
 
 
   <!-- Terminators -->
   <ksterm_death name="term_world"/>
-  <ksterm_max_steps name="term_max_steps" steps="1000000"/>
+  <ksterm_max_steps name="term_max_steps" steps="10000000"/>
 
 
   <!-- Writers -->
@@ -214,6 +214,8 @@ surface interaction with UCN.
     <component_member name="time" field="time" parent="component_step_final_particle"/>
     <component_member name="kinetic_energy" field="kinetic_energy_ev" parent="component_step_final_particle"/>
   </ks_component_group>
+
+  <kswrite_root_condition_step name="condition_nth_step" group="component_step_world" parent="step_id" nth_step="10000"/>
 
 
   <!-- Structure -->
@@ -263,7 +265,7 @@ surface interaction with UCN.
   frame_color_red=".2"
   frame_color_green=".2"
   frame_color_blue=".2"
-  view_angle="45"
+  view_angle="135"
   eye_angle="0.5"
   multi_samples="4"
   depth_peeling="10"
