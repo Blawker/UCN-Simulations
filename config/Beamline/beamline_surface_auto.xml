@@ -101,7 +101,7 @@ file can be automate with differenet seed and different output file.
 
 
   <!-- World -->
-  <cylinder_space name="world_space" z1="{-[outer_diameter]*1.01}" z2="1.7" r="2."/>
+  <cylinder_space name="world_space" z1="-0.2" z2="1.8" r="2."/>
   <!--box_space name="world_space" xa="-0.01" ya="-0.1" za="{-[outer_diameter]*1.01}" xb="1.5" yb="0.1" zb="1.7"/-->
 
   <!-- Shell Surface -->
@@ -148,6 +148,12 @@ file can be automate with differenet seed and different output file.
   <!-- Cylinder Space -->
   <tag name="cylinder_tag">
     <cylinder_space name="cylinder_space" r="{[inner_diameter]/2}" z1="0." z2="0.05"/>
+  </tag>
+
+  <!-- Outer World Space -->
+  <tag name="outer_world_tag">
+    <cylinder_space name="cylinder_world_space" r="2." z1="-0.05" z2="0.05"/>
+    <cylinder_tube_space name="cylinder_tube_world_space" z1="-0.1" z2="1.7" r1="1.9" r2="2."/>
   </tag>
 
   <!-- Detector Cover Space -->
@@ -254,6 +260,17 @@ file can be automate with differenet seed and different output file.
     </surface>
   </space>
 
+  <!-- Outer World Assembly -->
+  <space name="outer_world_assembly">
+    <space name="lower_world_cylinder" node="cylinder_world_space">
+      <transformation displacement="0. 0. -0.1"/>
+    </space>
+    <space name="upper_world_cylinder" node="cylinder_world_space">
+      <transformation displacement="0. 0. 1.7"/>
+    </space>
+    <space name="lateral_world_cylinder" node="cylinder_tube_world_space"/>
+  </space>
+
 
   <!-- Beamline Assembly -->
   <space name="beamline_assembly">
@@ -263,6 +280,7 @@ file can be automate with differenet seed and different output file.
     <!--space name="surface_sample" tree="disk_sample_assembly">
       <transformation rotation_euler="0. 90. 0."/>
     </space-->
+    <!-- To determine if a neutron as enough energy to reach the top of the beamline -->
     <space name="spectrometer" node="cylinder_space">
       <transformation rotation_euler="90. 90. 0."/>
     </space>
@@ -275,6 +293,7 @@ file can be automate with differenet seed and different output file.
   <!-- World Assembly -->
   <space name="world" node="world_space">
     <space name="beamline" tree="beamline_assembly"/>
+    <space name="outer_world" tree="outer_world_assembly"/>
   </space>
 
   <!-- Appearance -->
@@ -283,7 +302,7 @@ file can be automate with differenet seed and different output file.
   <appearance name="app_exit_cylinder" color="0 255 127 127" arc="4096" surfaces="world/beamline/boundary/exit_cylinder/#"/>
 
   <!-- Surface Sample -->
-  <appearance name="app_disk_join" color="255 127 0 127" arc="4096" surfaces="world/beamline/@disk_join_tag"/>
+  <!--appearance name="app_disk_join" color="255 127 0 127" arc="4096" surfaces="world/beamline/@disk_join_tag"/-->
 </geometry>
 
 
@@ -430,6 +449,10 @@ file can be automate with differenet seed and different output file.
 
     <geo_space name="exit_cover_detector" spaces="world/beamline/boundary/detector_cover/#">
       <command parent="root_terminator" field="add_terminator" child="term_cover_beamline"/>
+    </geo_space>
+
+    <geo_space name="exit_world" spaces="world/outer_world/#">
+      <command parent="root_terminator" field="add_terminator" child="term_world"/>
     </geo_space>
 
     <!-- Surface reflection of the UCN -->

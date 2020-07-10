@@ -97,7 +97,7 @@ when a neutron reach the top of the beamline.
 
 
   <!-- World -->
-  <cylinder_space name="world_space" z1="{-[outer_diameter]*1.01}" z2="1.7" r="2."/>
+  <cylinder_space name="world_space" z1="-0.2" z2="1.8" r="2."/>
   <!--box_space name="world_space" xa="-0.01" ya="-0.1" za="{-[outer_diameter]*1.01}" xb="1.5" yb="0.1" zb="1.7"/-->
 
   <!-- Shell Surface -->
@@ -144,6 +144,12 @@ when a neutron reach the top of the beamline.
   <!-- Cylinder Space -->
   <tag name="cylinder_tag">
     <cylinder_space name="cylinder_space" r="{[inner_diameter]/2}" z1="0." z2="0.05"/>
+  </tag>
+
+  <!-- Outer World Space -->
+  <tag name="outer_world_tag">
+    <cylinder_space name="cylinder_world_space" r="2." z1="-0.05" z2="0.05"/>
+    <cylinder_tube_space name="cylinder_tube_world_space" z1="-0.1" z2="1.7" r1="1.9" r2="2."/>
   </tag>
 
   <!-- Detector Cover Space -->
@@ -250,6 +256,17 @@ when a neutron reach the top of the beamline.
     </surface>
   </space>
 
+  <!-- Outer World Assembly -->
+  <space name="outer_world_assembly">
+    <space name="lower_world_cylinder" node="cylinder_world_space">
+      <transformation displacement="0. 0. -0.1"/>
+    </space>
+    <space name="upper_world_cylinder" node="cylinder_world_space">
+      <transformation displacement="0. 0. 1.7"/>
+    </space>
+    <space name="lateral_world_cylinder" node="cylinder_tube_world_space"/>
+  </space>
+
 
   <!-- Beamline Assembly -->
   <space name="beamline_assembly">
@@ -272,6 +289,7 @@ when a neutron reach the top of the beamline.
   <!-- World Assembly -->
   <space name="world" node="world_space">
     <space name="beamline" tree="beamline_assembly"/>
+    <space name="outer_world" tree="outer_world_assembly"/>
   </space>
 
   <!-- Appearance -->
@@ -464,6 +482,10 @@ when a neutron reach the top of the beamline.
       <command parent="root_terminator" field="add_terminator" child="term_cover_beamline"/>
     </geo_space>
 
+    <geo_space name="exit_world" spaces="world/outer_world/#">
+      <command parent="root_terminator" field="add_terminator" child="term_world"/>
+    </geo_space>
+
     <!-- Surface reflection of the UCN -->
     <geo_surface name="surface_reflection" surfaces="world/beamline/beamline_tube/#">
       <command parent="root_surface_interaction" field="set_surface_interaction" child="int_surface_UCN"/>
@@ -498,7 +520,7 @@ when a neutron reach the top of the beamline.
   <ks_simulation
     run="1"
     seed="51394"
-    events="1000"
+    events="100"
     space="space_world"
     generator="generator_uniform"
     trajectory="trajectory_exact"
@@ -529,7 +551,7 @@ when a neutron reach the top of the beamline.
     name="geometry_painter"
     path="[output_path]"
     file="beamline_surface_geometry.vtp"
-    surfaces="world/beamline/#"
+    surfaces="world/#"
   />
   <vtk_track_painter
     name="track_painter"

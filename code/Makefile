@@ -131,6 +131,19 @@ depend:
 .PHONY : depend
 
 #=============================================================================
+# Target rules for targets named conversion
+
+# Build rule for target.
+conversion: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 conversion
+.PHONY : conversion
+
+# fast build rule for target.
+conversion/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/conversion.dir/build.make CMakeFiles/conversion.dir/build
+.PHONY : conversion/fast
+
+#=============================================================================
 # Target rules for targets named convertCsvToRoot
 
 # Build rule for target.
@@ -142,19 +155,6 @@ convertCsvToRoot: cmake_check_build_system
 convertCsvToRoot/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/convertCsvToRoot.dir/build.make CMakeFiles/convertCsvToRoot.dir/build
 .PHONY : convertCsvToRoot/fast
-
-#=============================================================================
-# Target rules for targets named addHistogram
-
-# Build rule for target.
-addHistogram: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 addHistogram
-.PHONY : addHistogram
-
-# fast build rule for target.
-addHistogram/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/addHistogram.dir/build.make CMakeFiles/addHistogram.dir/build
-.PHONY : addHistogram/fast
 
 #=============================================================================
 # Target rules for targets named createHistogram
@@ -169,32 +169,32 @@ createHistogram/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/createHistogram.dir/build.make CMakeFiles/createHistogram.dir/build
 .PHONY : createHistogram/fast
 
-src/addHistogram.o: src/addHistogram.cpp.o
+src/conversion.o: src/conversion.cxx.o
 
-.PHONY : src/addHistogram.o
+.PHONY : src/conversion.o
 
 # target to build an object file
-src/addHistogram.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/addHistogram.dir/build.make CMakeFiles/addHistogram.dir/src/addHistogram.cpp.o
-.PHONY : src/addHistogram.cpp.o
+src/conversion.cxx.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/conversion.dir/build.make CMakeFiles/conversion.dir/src/conversion.cxx.o
+.PHONY : src/conversion.cxx.o
 
-src/addHistogram.i: src/addHistogram.cpp.i
+src/conversion.i: src/conversion.cxx.i
 
-.PHONY : src/addHistogram.i
+.PHONY : src/conversion.i
 
 # target to preprocess a source file
-src/addHistogram.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/addHistogram.dir/build.make CMakeFiles/addHistogram.dir/src/addHistogram.cpp.i
-.PHONY : src/addHistogram.cpp.i
+src/conversion.cxx.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/conversion.dir/build.make CMakeFiles/conversion.dir/src/conversion.cxx.i
+.PHONY : src/conversion.cxx.i
 
-src/addHistogram.s: src/addHistogram.cpp.s
+src/conversion.s: src/conversion.cxx.s
 
-.PHONY : src/addHistogram.s
+.PHONY : src/conversion.s
 
 # target to generate assembly for a file
-src/addHistogram.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/addHistogram.dir/build.make CMakeFiles/addHistogram.dir/src/addHistogram.cpp.s
-.PHONY : src/addHistogram.cpp.s
+src/conversion.cxx.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/conversion.dir/build.make CMakeFiles/conversion.dir/src/conversion.cxx.s
+.PHONY : src/conversion.cxx.s
 
 src/convertCsvToRoot.o: src/convertCsvToRoot.cpp.o
 
@@ -258,12 +258,12 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
-	@echo "... addHistogram"
+	@echo "... conversion"
 	@echo "... convertCsvToRoot"
 	@echo "... createHistogram"
-	@echo "... src/addHistogram.o"
-	@echo "... src/addHistogram.i"
-	@echo "... src/addHistogram.s"
+	@echo "... src/conversion.o"
+	@echo "... src/conversion.i"
+	@echo "... src/conversion.s"
 	@echo "... src/convertCsvToRoot.o"
 	@echo "... src/convertCsvToRoot.i"
 	@echo "... src/convertCsvToRoot.s"

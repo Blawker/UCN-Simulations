@@ -1,0 +1,14 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/Thomas_Guilbaud/Documents/Stage 2A - UCN - 2020/UCN-Simulations/code/src/conversion.cxx
+iostream
+-
+cmath
+-
+

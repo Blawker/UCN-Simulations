@@ -111,7 +111,7 @@ surface interaction with UCN.
   <ksgen_generator_composite name="generator_uniform" pid="2112">
     <energy_composite>
       <!-- Boltzmann distribution of the energy of UCN -->
-      <energy_fix value="140.e-9"/>
+      <energy_fix value="130.7e-9"/>
       <!--energy_formula value_min="1.30e-7" value_max="3.2e-7"
                       value_formula="2*TMath::Sqrt(x/TMath::Pi())*(1/([beta]*[e]))^(3/2)*exp(-x/[beta])"/-->
       <!--energy_histogram path="[input_path]"
@@ -126,8 +126,8 @@ surface interaction with UCN.
       <time_fix value="0."/>
     </time_composite>
     <direction_spherical_composite>
-      <theta_spherical angle_min="0." angle_max="180."/>
-      <phi_uniform value_min="0." value_max="360."/>
+      <theta_fix value="90."/>
+      <phi_fix value="0."/>
     </direction_spherical_composite>
   </ksgen_generator_composite>
 
@@ -137,7 +137,7 @@ surface interaction with UCN.
     <interpolator_fast name="interpolator_fast"/>
     <integrator_rk86 name="integrator_rk86"/>
     <term_propagation name="term_propagation"/>
-    <term_gravity name="term_gravity" gravity="0. 0. -9.8"/>
+    <!--term_gravity name="term_gravity" gravity="0. 0. -9.8"/-->
     <control_time name="control_time" time="1.e-6"/>
   </kstraj_trajectory_exact>
 
@@ -166,20 +166,20 @@ surface interaction with UCN.
           mass: mass of the moving part (kg)
       -->
   <ksint_moving_surface_UCN name="int_moving_surface_UCN"
-    eta="2.e-4"
+    eta="{2.e-4*0}"
     alpha="5.e-6"
     real_optical_potential="2.08e-7"
     correlation_length="20.e-9"
     theta="90."
     phi="0."
     mass="1.675e-27"
-    value_formula="-0.01*TMath::Cos(100*x)+0.05" value_min="0.04" value_max="0.06"
+    value_formula="-5*x" value_min="0." value_max="1."
   />
 
 
   <!-- Terminators -->
   <ksterm_death name="term_world"/>
-  <ksterm_max_steps name="term_max_steps" steps="10000000"/>
+  <ksterm_max_steps name="term_max_steps" steps="20000"/>
 
 
   <!-- Writers -->

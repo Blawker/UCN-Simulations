@@ -23,10 +23,7 @@ KSIntMovingSurfaceUCN::KSIntMovingSurfaceUCN() :
     fTanThetaIn(0.),
     fExpThetaCoef(0.),
     fValueFunction(nullptr)
-{
-  fValueFunction = new TF1("function", fValueFormula.c_str(), fValueMin, fValueMax);
-  return;
-}
+{}
 KSIntMovingSurfaceUCN::KSIntMovingSurfaceUCN(const KSIntMovingSurfaceUCN& aCopy) :
     KSComponent(),
     fEta(aCopy.fEta),
@@ -42,10 +39,7 @@ KSIntMovingSurfaceUCN::KSIntMovingSurfaceUCN(const KSIntMovingSurfaceUCN& aCopy)
     fTanThetaIn(aCopy.fTanThetaIn),
     fExpThetaCoef(aCopy.fExpThetaCoef),
     fValueFunction(nullptr)
-{
-  fValueFunction = new TF1("function", fValueFormula.c_str(), fValueMin, fValueMax);
-  return;
-}
+{}
 KSIntMovingSurfaceUCN* KSIntMovingSurfaceUCN::Clone() const
 {
     return new KSIntMovingSurfaceUCN(*this);
@@ -104,20 +98,21 @@ void KSIntMovingSurfaceUCN::ExecuteReflection(const KSParticle& anInitialParticl
     // Get the momentum of the particle and the moving surface
     KThreeVector tInitialMomentum = anInitialParticle.GetMomentum();
 
-    // Set the direction
-    fTheta *= katrin::KConst::Pi()/180;
-    fPhi *= katrin::KConst::Pi()/180;
-    KThreeVector tMovingMomentum(sin(fTheta) * cos(fPhi),
-                                 sin(fTheta) * sin(fPhi),
-                                 cos(fTheta) );
+    // Set the direction of the moving part
+    double fThetaRad = fTheta * katrin::KConst::Pi()/180;
+    double fPhiRad = fPhi * katrin::KConst::Pi()/180;
+    KThreeVector tMovingMomentum(sin(fThetaRad) * cos(fPhiRad),
+                                 sin(fThetaRad) * sin(fPhiRad),
+                                 cos(fThetaRad) );
 
     // Set magnitude
+    fValueFunction = new TF1("function", fValueFormula.c_str(), fValueMin, fValueMax);
     double tTimeValue = anInitialParticle.GetTime();
-    double tMovingMomentumMagnitude = fMass * fValueFunction->Derivative(tTimeValue, 0, 0.001);
+    double tMovingMomentumMagnitude = anInitialParticle.GetMass() * fValueFunction->Derivative(tTimeValue, 0, 0.001);
     tMovingMomentum.SetMagnitude(tMovingMomentumMagnitude);
 
     // Add the MovingMomentum to the initial momentum of the particle
-    tInitialMomentum -= tMovingMomentum;
+    tInitialMomentum -= 2*tMovingMomentum;
 
     // Decompose the modified momentum of the particle
     KThreeVector tInitialNormalMomentum = tInitialMomentum.Dot(tNormal) * tNormal;

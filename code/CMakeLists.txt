@@ -25,12 +25,11 @@ SET( CMAKE_CXX_FLAGS "-std=c++11" )
 
 # Create the executables
 ADD_EXECUTABLE( createHistogram src/createHistogram.cpp )
-ADD_EXECUTABLE( addHistogram src/addHistogram.cpp )
 ADD_EXECUTABLE( convertCsvToRoot src/convertCsvToRoot.cpp )
+ADD_EXECUTABLE( conversion src/conversion.cxx )
 
 # Link the Root libraries
 target_link_libraries(createHistogram ${ROOT_LIBRARIES})
-target_link_libraries(addHistogram ${ROOT_LIBRARIES})
 target_link_libraries(convertCsvToRoot ${ROOT_LIBRARIES})
 
 # Talking make

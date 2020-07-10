@@ -194,6 +194,7 @@ int main(int argc, char* argv[]) {
 
   // Create the Graph
   TGraph *gr = new TGraph(n,x,y);
+  gr->SetName("Graph");
   gr->SetTitle("TRIGA Spectrum");
   gr->GetXaxis()->SetTitle("Energy (eV)");
   gr->GetYaxis()->SetTitle("Rate");
