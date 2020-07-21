@@ -24,9 +24,9 @@ new component that include moving part (surfaces, spaces, assembly, ...) and
 surface interaction with UCN.
 -->
 
-<define name="output_path" value="[KASPERSYS]/../../Stage 2A - UCN - 2020/UCN-Simulations/output/Piston"/>
-<define name="log_path" value="[KASPERSYS]/../../Stage 2A - UCN - 2020/UCN-Simulations/log/Piston"/>
-<define name="input_path" value="[KASPERSYS]/../../Stage 2A - UCN - 2020/UCN-Simulations/config/Spectrum"/>
+<define name="output_path" value="[KASPERSYS]/../../Stage_2A_-_UCN_-_2020/UCN-Simulations/output/Piston"/>
+<define name="log_path" value="[KASPERSYS]/../../Stage_2A_-_UCN_-_2020/UCN-Simulations/log/Piston"/>
+<define name="input_path" value="[KASPERSYS]/../../Stage_2A_-_UCN_-_2020/UCN-Simulations/config/Spectrum"/>
 
 
 <messages>
@@ -118,7 +118,7 @@ surface interaction with UCN.
         base="triga_neutron_spectrum.root" histogram="hke_triga"/-->
     </energy_composite>
     <position_rectangular_composite>
-      <x_fix value="0."/>
+      <x_fix value="{-0.04*0}"/>
       <y_fix value="0."/>
       <z_fix value="0."/>
     </position_rectangular_composite>
@@ -138,6 +138,10 @@ surface interaction with UCN.
     <integrator_rk86 name="integrator_rk86"/>
     <term_propagation name="term_propagation"/>
     <!--term_gravity name="term_gravity" gravity="0. 0. -9.8"/-->
+    <term_moving_surface name="term_moving_surface"
+      theta="90." phi="180."
+      value_formula="0.01*0.5*(1+TMath::Cos(10*x))*0 + 0.1*x*0 + 0.06*0" value_min="0." value_max="1"
+      displacement="0.05 0. 0."/>
     <control_time name="control_time" time="1.e-6"/>
   </kstraj_trajectory_exact>
 
@@ -165,7 +169,7 @@ surface interaction with UCN.
           value_formula: equation to describe the motion of the moving mirror (m)
           mass: mass of the moving part (kg)
       -->
-  <ksint_moving_surface_UCN name="int_moving_surface_UCN"
+  <!--ksint_moving_surface_UCN name="int_moving_surface_UCN"
     eta="{2.e-4*0}"
     alpha="5.e-6"
     real_optical_potential="2.08e-7"
@@ -174,7 +178,7 @@ surface interaction with UCN.
     phi="0."
     mass="1.675e-27"
     value_formula="-5*x" value_min="0." value_max="1."
-  />
+  /-->
 
 
   <!-- Terminators -->
@@ -213,6 +217,7 @@ surface interaction with UCN.
     <component_member name="position" field="position" parent="component_step_final_particle"/>
     <component_member name="time" field="time" parent="component_step_final_particle"/>
     <component_member name="kinetic_energy" field="kinetic_energy_ev" parent="component_step_final_particle"/>
+    <component_member name="velocity" field="velocity" parent="component_step_final_particle"/>
   </ks_component_group>
 
   <kswrite_root_condition_step name="condition_nth_step" group="component_step_world" parent="step_id" nth_step="10000"/>
@@ -232,9 +237,9 @@ surface interaction with UCN.
     </geo_surface>
 
     <!-- Surface reflection of the UCN on moving mirror -->
-    <geo_surface name="moving_surface_reflection" surfaces="world/piston/moving_mirror">
+    <!--geo_surface name="moving_surface_reflection" surfaces="world/piston/moving_mirror">
       <command parent="root_surface_interaction" field="set_surface_interaction" child="int_moving_surface_UCN"/>
-    </geo_surface>
+    </geo_surface-->
 
   </ksgeo_space>
 
