@@ -161,8 +161,8 @@ part like in the real world.
 
   <!-- Slit Surface -->
   <tag name="slit_tag">
-    <cylinder_surface name="slit_in_surface" r="{[inner_diameter]/2}" z1="-2.5e-3" z2="0."/>
-    <cylinder_surface name="slit_out_surface" r="{[inner_diameter]/2}" z1="0." z2="2.5e-3"/>
+    <cylinder_surface name="slit_in_surface" r="{[inner_diameter]/2}" z1="{-[slit_length]}" z2="0."/>
+    <cylinder_surface name="slit_out_surface" r="{[inner_diameter]/2}" z1="0." z2="[slit_length]"/>
   </tag>
 
 

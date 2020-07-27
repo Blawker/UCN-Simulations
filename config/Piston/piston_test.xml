@@ -67,7 +67,12 @@ surface interaction with UCN.
   </tag>
 
   <tag name="disk_tag">
+    <disk_surface name="disk_surface_reduced" z="0." r="0.025"/>
     <disk_surface name="disk_surface" z="0." r="0.05"/>
+  </tag>
+
+  <tag name="cylinder_space_tag">
+    <cylinder_space name="cylinder_space" z1="0." z2="0.05" r="0.05"/>
   </tag>
 
   <!-- Fix Mirror Assembly-->
@@ -78,14 +83,26 @@ surface interaction with UCN.
     </surface>
   </space>
 
+  <!-- Moving Mirror Assembly -->
+  <space name="moving_mirror_assembly">
+    <!--surface name="moving_mirror_outer" node="disk_surface">
+      <transformation displacement="0. 0. 0.05"/>
+    </surface>
+    <surface name="moving_mirror_inner" node="disk_surface_reduced">
+      <transformation displacement="0. 0. 0.04"
+                      rotation_euler="0. 35. 0."/>
+    </surface-->
+    <space name="moving_mirror" node="cylinder_space">
+      <transformation displacement="0. 0. 0.05"/>
+    </space>
+  </space>
+
   <!-- Piston Assembly -->
   <space name="piston_assembly">
     <!-- Fix Parts -->
     <space name="fix_mirror" tree="fix_mirror_assembly"/>
     <!-- Moving Part -->
-    <surface name="moving_mirror" node="disk_surface">
-      <transformation displacement="0. 0. 0.05"/>
-    </surface>
+    <space name="moving_mirror" tree="moving_mirror_assembly"/>
   </space>
 
   <!-- World Assembly -->
@@ -96,7 +113,7 @@ surface interaction with UCN.
   </space>
 
   <!-- Appearance -->
-  <appearance name="app_moving_mirror" color="255 127 0 127" arc="4096" surfaces="world/piston/moving_mirror"/>
+  <appearance name="app_moving_mirror" color="255 127 0 127" arc="4096" surfaces="world/piston/moving_mirror/#"/>
 
 </geometry>
 
@@ -127,7 +144,7 @@ surface interaction with UCN.
     </time_composite>
     <direction_spherical_composite>
       <theta_fix value="90."/>
-      <phi_fix value="0."/>
+      <phi_fix value="30."/>
     </direction_spherical_composite>
   </ksgen_generator_composite>
 
@@ -138,10 +155,10 @@ surface interaction with UCN.
     <integrator_rk86 name="integrator_rk86"/>
     <term_propagation name="term_propagation"/>
     <!--term_gravity name="term_gravity" gravity="0. 0. -9.8"/-->
-    <term_moving_surface name="term_moving_surface"
+    <!--term_moving_surface name="term_moving_surface"
       theta="90." phi="180."
       value_formula="0.01*0.5*(1+TMath::Cos(10*x))*0 + 0.1*x*0 + 0.06*0" value_min="0." value_max="1"
-      displacement="0.05 0. 0."/>
+      displacement="0.05 0. 0."/-->
     <control_time name="control_time" time="1.e-6"/>
   </kstraj_trajectory_exact>
 
@@ -152,6 +169,24 @@ surface interaction with UCN.
   <ksnav_surface name="nav_surface" transmission_split="false" reflection_split="false"/>
 
 
+  <!-- Motions -->
+    <!-- Equation of motion is a time-dependent position function -->
+  <define name="equation_motion" value="0.05*x"/>
+  <define name="time_start_motion" value="0."/> <!-- Time in secondes -->
+  <define name="time_end_motion" value="10."/> <!-- Time in secondes -->
+  <define name="theta_motion" value="90."/>
+  <define name="phi_motion" value="180."/>
+
+  <ksmotion_surface_translation name="motion_surface_translation"
+    surfaces="world/piston/moving_mirror/#"
+    theta="[theta_motion]"
+    phi="[phi_motion]"
+    value_formula="[equation_motion]"
+    value_min="[time_start_motion]"
+    value_max="[time_end_motion]"
+  />
+
+
   <!-- Interactions -->
     <!-- Surface Reflection Interaction for Stainless Steel -->
     <!--  eta: loss per bounce,                          alpha: spin depolarization,
@@ -160,30 +195,31 @@ surface interaction with UCN.
     eta="2.e-4"
     alpha="5.e-6"
     real_optical_potential="2.08e-7"
-    correlation_length="20.e-9"/>
+    correlation_length="20.e-9"
+  />
 
     <!-- Surface Reflection Interaction for moving Stainless Steel along the x-axis -->
     <!--  eta: loss per bounce,                          alpha: spin depolarization,
           real_optical_potential: fermi potential (eV),  correlation_length: roughness (m)
           theta & phi: spherical angle, direction along the moving part (°)
           value_formula: equation to describe the motion of the moving mirror (m)
-          mass: mass of the moving part (kg)
       -->
-  <!--ksint_moving_surface_UCN name="int_moving_surface_UCN"
-    eta="{2.e-4*0}"
+  <ksint_moving_surface_UCN name="int_moving_surface_UCN"
+    eta="2.e-4"
     alpha="5.e-6"
     real_optical_potential="2.08e-7"
     correlation_length="20.e-9"
-    theta="90."
-    phi="0."
-    mass="1.675e-27"
-    value_formula="-5*x" value_min="0." value_max="1."
-  /-->
+    theta="[theta_motion]"
+    phi="[phi_motion]"
+    value_formula="[equation_motion]"
+    value_min="[time_start_motion]"
+    value_max="[time_end_motion]"
+  />
 
 
   <!-- Terminators -->
   <ksterm_death name="term_world"/>
-  <ksterm_max_steps name="term_max_steps" steps="20000"/>
+  <ksterm_max_steps name="term_max_steps" steps="200000"/>
 
 
   <!-- Writers -->
@@ -231,15 +267,17 @@ surface interaction with UCN.
     <command parent="write_root" field="add_track_output" child="component_track_world"/>
     <command parent="write_root" field="add_step_output" child="component_step_world"/>
 
+    <command parent="root_surface_motion" field="set_surface_motion" child="motion_surface_translation"/>
+
     <!-- Surface reflection of the UCN on fix mirror -->
     <geo_surface name="surface_reflection" surfaces="world/piston/fix_mirror/#">
       <command parent="root_surface_interaction" field="set_surface_interaction" child="int_surface_UCN"/>
     </geo_surface>
 
     <!-- Surface reflection of the UCN on moving mirror -->
-    <!--geo_surface name="moving_surface_reflection" surfaces="world/piston/moving_mirror">
+    <geo_surface name="moving_surface_reflection" surfaces="world/piston/moving_mirror/#">
       <command parent="root_surface_interaction" field="set_surface_interaction" child="int_moving_surface_UCN"/>
-    </geo_surface-->
+    </geo_surface>
 
   </ksgeo_space>
 

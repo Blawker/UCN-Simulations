@@ -9,7 +9,7 @@ output_path="Documents/Stage_2A_-_UCN_-_2020/UCN-Simulations/output/Beamline/tes
 simulation_path="Documents/Kassiopeia/Kasper_build_mod"
 
 seed="8230"
-output_folder="run21_07_2020_1"
+output_folder="run22_07_2020_1"
 
 cd
 cd $simulation_path
@@ -20,19 +20,19 @@ echo -e "\n"
 if [ $isNewRun == "Y" ]; then
   clear
   if [ -d "$output_path/$output_folder" ]; then
+    echo "The folder:" $output_folder "already exist in" $output_path
+    echo ""
+  else
     cd
     cd $output_path
     pwd
-    rm -r  $output_folder
+    rm -r $output_folder
     echo "Remove dir:" $output_folder
     mkdir $output_folder
     echo "Create dir:" $output_folder
     cd
     cd $simulation_path
     pwd
-  else
-    echo "The folder:" $output_folder "already exist in" $output_path
-    echo ""
   fi
 
   echo "Launch parallelized simulation..."
