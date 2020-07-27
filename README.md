@@ -7,6 +7,7 @@ Fork of the modified Kassiopeia: *https://github.com/Blawker/Kassiopeia*.
 - Initialize the geometry of a beamline structure for UCN.
 - Adding surface reflection for stainless steel.
 - Generate initial energy spectrum according to TRIGA neutrons distribution[1](1).
+- Adding slits to simulation the junction between the different part that compose the beamline.
 - Adding binary program to create and add output file into Root's histograms.
 - Adding Shell Script to parallelized simulations[2](2).
 
