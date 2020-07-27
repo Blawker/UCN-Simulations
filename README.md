@@ -30,7 +30,8 @@ Fork of the modified Kassiopeia: *https://github.com/Blawker/Kassiopeia*.
 
 It is preferable to use `<define />` input because there could be interaction that must have the same motion :
 ```xml
-<define name="equation_motion" value="0.05*x"/> <!-- Equation of motion is a time-dependent position function -->
+  <!-- Equation of motion is a time-dependent position function -->
+<define name="equation_motion" value="0.05*x"/>
 <define name="time_start_motion" value="0."/> <!-- Time (s) -->
 <define name="time_end_motion" value="10."/> <!-- Time (s) -->
 <define name="theta_motion" value="90."/> <!-- Angle (°) -->
