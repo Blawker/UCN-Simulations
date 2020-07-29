@@ -16,7 +16,7 @@ Fork of the modified Kassiopeia: *https://github.com/Blawker/Kassiopeia*.
 - Modify the source code of Kassiopeia to implement :
   - Moving part : surfaces, spaces, assemblies.
   - Interaction of UCN on moving surfaces[3](3).
-- To create a motion of a part
+- To create a motion of a part :
   - Enter the line in a config_file.xml :
 
 ```xml
@@ -30,7 +30,7 @@ Fork of the modified Kassiopeia: *https://github.com/Blawker/Kassiopeia*.
 />
 ```
 
-  - Then write an moving interaction command that has the same motion has the surface. Here is an example of interaction with stainless steel :
+  - Then enter a moving interaction command that has the same motion has the surface. Here is an example of interaction with stainless steel :
 
 ```xml
 <ksint_moving_surface_UCN name="int_moving_surface_UCN"
