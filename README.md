@@ -63,6 +63,8 @@ Fork of the modified Kassiopeia: *https://github.com/Blawker/Kassiopeia*.
   <define name="theta_motion" value="90."/> <!-- Angle (°) -->
   <define name="phi_motion" value="180."/> <!-- Angle (°) -->
   ```
+  
+- A basic simulation configuration can be found in the fork folder called `PistonSimulation.xml` : https://github.com/Blawker/Kassiopeia/blob/master/Kassiopeia/XML/Examples/PistonSimulation.xml
 
 ### Bibliography
 [1](1) [I. Altarev et al. Neutron velocity distribution from a superthermal solid 2H2 ultracold neutron source. The European Physical Journal A, 37: 9-14 July 2008.](1)
