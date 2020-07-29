@@ -16,7 +16,7 @@ Fork of the modified Kassiopeia: *https://github.com/Blawker/Kassiopeia*.
 - Modify the source code of Kassiopeia to implement :
   - Moving part : surfaces, spaces, assemblies.
   - Interaction of UCN on moving surfaces[3](3).
-- To create a motion of a part :
+- To create the motion of a part :
   - Enter the line in a config_file.xml to configure the motion :
   ```xml
   <ksmotion_surface_translation name="motion_surface_translation"
