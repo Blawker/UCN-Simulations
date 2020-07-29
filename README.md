@@ -30,7 +30,7 @@ Fork of the modified Kassiopeia: *https://github.com/Blawker/Kassiopeia*.
 />
 ```
 
-  - Then enter a moving interaction command that has the same motion has the surface. Here is an example of interaction with stainless steel :
+  - Then enter a moving interaction command that has the same motion has the surface. Here is an example of interaction of UCN with stainless steel :
 
 ```xml
 <ksint_moving_surface_UCN name="int_moving_surface_UCN"
