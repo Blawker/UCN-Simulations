@@ -16,7 +16,8 @@ Fork of the modified Kassiopeia: *https://github.com/Blawker/Kassiopeia*.
 - Modify the source code of Kassiopeia to implement :
   - Moving part : surfaces, spaces, assemblies.
   - Interaction of UCN on moving surfaces[3](3).
-- To create a motion of a part, enter the line in a config_file.xml :
+- To create a motion of a part
+  - Enter the line in a config_file.xml :
 
 ```xml
 <ksmotion_surface_translation name="motion_surface_translation"
@@ -29,7 +30,24 @@ Fork of the modified Kassiopeia: *https://github.com/Blawker/Kassiopeia*.
 />
 ```
 
-It is preferable to use `<define />` input because there could be interaction that must have the same motion :
+  - Then write an moving interaction command that has the same motion has the surface. Here is an example of interaction with stainless steel :
+
+```xml
+<ksint_moving_surface_UCN name="int_moving_surface_UCN"
+  eta="2.e-4"
+  alpha="5.e-6"
+  real_optical_potential="2.08e-7"
+  correlation_length="20.e-9"
+  theta="[theta_motion]"
+  phi="[phi_motion]"
+  value_formula="[equation_motion]"
+  value_min="[time_start_motion]"
+  value_max="[time_end_motion]"
+/>
+```
+
+  - It is preferable to use `<define />` input because there could be interactions that must have the same motion :
+  
 ```xml
   <!-- Equation of motion is a time-dependent position function -->
 <define name="equation_motion" value="0.05*x"/>
@@ -42,6 +60,6 @@ It is preferable to use `<define />` input because there could be interaction th
 ### Bibliography
 [1](1) [I. Altarev et al. Neutron velocity distribution from a superthermal solid 2H2 ultracold neutron source. The European Physical Journal A, 37: 9-14 July 2008.](1)
 
-[2](2) [https://www.gnu.org/software/parallel/](2)
+[2](2) [GNU Parallel, https://www.gnu.org/software/parallel/](2)
 
 [3](3) [Z. Bogorad  Ultracold Neutron Storage Simulation Using the Kassiopeia Software Package. Massachusetts Institute of Technology 2019, June 2019.](3)
