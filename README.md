@@ -46,7 +46,7 @@ Fork of the modified Kassiopeia: *https://github.com/Blawker/Kassiopeia*.
 />
 ```
 
-  - It is preferable to use `<define />` input because there could be interactions that must have the same motion :
+  - It is preferable to use `<define />` input because there could be many components that must have the same motion :
   
 ```xml
   <!-- Equation of motion is a time-dependent position function -->
