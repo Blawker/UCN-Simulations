@@ -165,8 +165,8 @@ int main(int argc, char* argv[]) {
   }
 
   // Boundary of the graph on x-axis
-  double upper_energy = 5000e-9;
-  double lower_energy = 0e-9;
+  //double upper_energy = 5000e-9;
+  //double lower_energy = 0e-9;
 
   // Variables for the extraction
   std::string line, word;

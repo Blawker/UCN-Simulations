@@ -6,7 +6,7 @@
 
 #IncludeRegexTransform: 
 
-/Users/Thomas_Guilbaud/Documents/Stage 2A - UCN - 2020/UCN-Simulations/code/src/convertCsvToRoot.cpp
+/Users/Thomas_Guilbaud/Documents/Stage_2A_-_UCN_-_2020/UCN-Simulations/code/src/convertCsvToRoot.cpp
 iostream
 -
 fstream
@@ -20,33 +20,33 @@ vector
 stdlib.h
 -
 TCanvas.h
-/Users/Thomas_Guilbaud/Documents/Stage 2A - UCN - 2020/UCN-Simulations/code/src/TCanvas.h
+/Users/Thomas_Guilbaud/Documents/Stage_2A_-_UCN_-_2020/UCN-Simulations/code/src/TCanvas.h
 TFrame.h
-/Users/Thomas_Guilbaud/Documents/Stage 2A - UCN - 2020/UCN-Simulations/code/src/TFrame.h
+/Users/Thomas_Guilbaud/Documents/Stage_2A_-_UCN_-_2020/UCN-Simulations/code/src/TFrame.h
 TBenchmark.h
-/Users/Thomas_Guilbaud/Documents/Stage 2A - UCN - 2020/UCN-Simulations/code/src/TBenchmark.h
+/Users/Thomas_Guilbaud/Documents/Stage_2A_-_UCN_-_2020/UCN-Simulations/code/src/TBenchmark.h
 TString.h
-/Users/Thomas_Guilbaud/Documents/Stage 2A - UCN - 2020/UCN-Simulations/code/src/TString.h
+/Users/Thomas_Guilbaud/Documents/Stage_2A_-_UCN_-_2020/UCN-Simulations/code/src/TString.h
 TF1.h
-/Users/Thomas_Guilbaud/Documents/Stage 2A - UCN - 2020/UCN-Simulations/code/src/TF1.h
+/Users/Thomas_Guilbaud/Documents/Stage_2A_-_UCN_-_2020/UCN-Simulations/code/src/TF1.h
 TH1.h
-/Users/Thomas_Guilbaud/Documents/Stage 2A - UCN - 2020/UCN-Simulations/code/src/TH1.h
+/Users/Thomas_Guilbaud/Documents/Stage_2A_-_UCN_-_2020/UCN-Simulations/code/src/TH1.h
 TGraph.h
-/Users/Thomas_Guilbaud/Documents/Stage 2A - UCN - 2020/UCN-Simulations/code/src/TGraph.h
+/Users/Thomas_Guilbaud/Documents/Stage_2A_-_UCN_-_2020/UCN-Simulations/code/src/TGraph.h
 TFile.h
-/Users/Thomas_Guilbaud/Documents/Stage 2A - UCN - 2020/UCN-Simulations/code/src/TFile.h
+/Users/Thomas_Guilbaud/Documents/Stage_2A_-_UCN_-_2020/UCN-Simulations/code/src/TFile.h
 TROOT.h
-/Users/Thomas_Guilbaud/Documents/Stage 2A - UCN - 2020/UCN-Simulations/code/src/TROOT.h
+/Users/Thomas_Guilbaud/Documents/Stage_2A_-_UCN_-_2020/UCN-Simulations/code/src/TROOT.h
 TError.h
-/Users/Thomas_Guilbaud/Documents/Stage 2A - UCN - 2020/UCN-Simulations/code/src/TError.h
+/Users/Thomas_Guilbaud/Documents/Stage_2A_-_UCN_-_2020/UCN-Simulations/code/src/TError.h
 TInterpreter.h
-/Users/Thomas_Guilbaud/Documents/Stage 2A - UCN - 2020/UCN-Simulations/code/src/TInterpreter.h
+/Users/Thomas_Guilbaud/Documents/Stage_2A_-_UCN_-_2020/UCN-Simulations/code/src/TInterpreter.h
 TSystem.h
-/Users/Thomas_Guilbaud/Documents/Stage 2A - UCN - 2020/UCN-Simulations/code/src/TSystem.h
+/Users/Thomas_Guilbaud/Documents/Stage_2A_-_UCN_-_2020/UCN-Simulations/code/src/TSystem.h
 TPaveText.h
-/Users/Thomas_Guilbaud/Documents/Stage 2A - UCN - 2020/UCN-Simulations/code/src/TPaveText.h
+/Users/Thomas_Guilbaud/Documents/Stage_2A_-_UCN_-_2020/UCN-Simulations/code/src/TPaveText.h
 TFitResult.h
-/Users/Thomas_Guilbaud/Documents/Stage 2A - UCN - 2020/UCN-Simulations/code/src/TFitResult.h
+/Users/Thomas_Guilbaud/Documents/Stage_2A_-_UCN_-_2020/UCN-Simulations/code/src/TFitResult.h
 
 /opt/local/libexec/root6/include/root/Buttons.h
 

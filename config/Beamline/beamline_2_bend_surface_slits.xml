@@ -16,25 +16,17 @@
 -->
 
 <!--
-Created the 20. July 2020
+Created the 05. August 2020
 Author: Thomas Guilbaud
-Version: 3.0
+Version: 3.1
 Modified beamline_surface.xml. This config file use only the inner surface of the beamline.
 This file is a V3.0 of the previous one. Add the effect of slits between the
 part like in the real world.
 -->
-<external_define name="random_seed" value="81300"/>
-<external_define name="output_folder" value="run00"/>
-<external_define name="output_file_name" value="tSPECT_beamline_slits_simulation_1.root"/>
 
-<define name="sim_dir_name" value="tSPECT_beamline_slits"/>
-<define name="simbase_dir" value="/project/aspecthpc/tSPECT_Simulations"/>
-<!--define name="cache_dir" value="[simbase_dir]/[sim_dir_name]/cache"/-->
-<define name="output_path" value="[simbase_dir]/[sim_dir_name]/output/[output_folder]"/>
-
-<!--define name="output_path" value="[KASPERSYS]/../UCN-Simulations/output/Beamline/run21_07_2020_1"/>
-<define name="log_path" value="[KASPERSYS]/../UCN-Simulations/log/Beamline"/>
-<define name="input_path" value="[KASPERSYS]/../UCN-Simulations/config/Spectrum"/-->
+<define name="output_path" value="[KASPERSYS]/../../Stage_2A_-_UCN_-_2020/UCN-Simulations/output/Beamline/test"/>
+<define name="log_path" value="[KASPERSYS]/../../Stage_2A_-_UCN_-_2020/UCN-Simulations/log/Beamline"/>
+<define name="input_path" value="[KASPERSYS]/../../Stage_2A_-_UCN_-_2020/UCN-Simulations/config/Spectrum"/>
 
 
 <!--messages>
@@ -66,22 +58,24 @@ part like in the real world.
 </messages-->
 
 <geometry>
-  <!-- Major Parameters of the Beamline -->
+  <!-- Major Input Parameters -->
   <define name="inner_diameter" value="66.e-3"/> <!-- Inner diameter of the tubes = 66 mm -->
-  <define name="outer_diameter" value="70.e-3"/> <!-- Outer diameter of the tubes = 70 mm -->
+  <define name="height" value="1.60"/> <!-- Height of the beamline (m) -->
+  <define name="length" value="2."/> <!-- Projected length of the beamline on the floor (m) -->
+  <define name="bend_radii" value="40.e-2"/> <!-- Bend radii of the bend shape (m) -->
+  <define name="angle" value="40."/> <!-- Angle (°) -->
 
-  <define name="bend1_radii" value="25.e-2"/> <!-- Bend radii of the bend1 shape = 25 cm -->
-  <define name="bend2_radii" value="40.e-2"/> <!-- Bend radii of the bend2 shape = 40 cm -->
-  <define name="bend3_radii" value="8.e-2"/> <!-- Bend radii of the bend3 shape = 8 cm -->
+  <!-- Major Calculated Parameters of the Beamline -->
+  <define name="a_rad" value="{[angle]*TMath::Pi()/180}"/>
 
-  <define name="bend1_angle" value="45."/> <!-- Bend angle of the bend1 shape = 45°-->
-  <define name="bend2_angle" value="45."/> <!-- Bend angle of the bend2 shape = 45° -->
-  <define name="bend3_angle" value="90."/> <!-- Bend angle of the bend3 shape = 90° -->
+  <define name="tube2_length" value="{[length]-[height]/TMath::Tan([a_rad])}"/> <!-- Length of the tube2 cylinder -->
+  <define name="tube1_length" value="{([length]-[tube2_length]-2*[bend_radii]*TMath::Sin([a_rad]))/(TMath::Cos([a_rad]))}"/> <!-- Length of the tube1 cylinder -->
 
-  <define name="tube1_length" value="70.e-2"/> <!-- Length of the tube1 cylinder = 70 cm -->
-  <define name="tube2_length" value="28.e-2"/> <!-- Length of the tube2 cylinder = 28 cm -->
-  <define name="tube3_length" value="44.e-2"/> <!-- Length of the tube3 cylinder = 44 cm -->
-  <define name="tube4_length" value="32.e-2"/> <!-- Length of the tube4 cylinder = 32 cm -->
+  <define name="bend1_radii" value="[bend_radii]"/> <!-- Bend radii of the bend1 shape -->
+  <define name="bend2_radii" value="[bend_radii]"/> <!-- Bend radii of the bend2 shape -->
+
+  <define name="bend1_angle" value="[angle]"/> <!-- Bend angle of the bend1 shape -->
+  <define name="bend2_angle" value="[angle]"/> <!-- Bend angle of the bend2 shape -->
 
   <define name="slit_length" value="2.5e-3"/> <!-- Length of the slits between parts = 2.5 mm -->
 
@@ -90,26 +84,18 @@ part like in the real world.
   <define name="P1y" value="{-[bend1_radii]*TMath::Cos([bend1_angle]*TMath::Pi()/180)+[bend1_radii]}"/>
   <define name="P2x" value="{[tube1_length]*TMath::Cos([bend1_angle]*TMath::Pi()/180)+[P1x]}"/>
   <define name="P2y" value="{[tube1_length]*TMath::Sin([bend1_angle]*TMath::Pi()/180)+[P1y]}"/>
-  <define name="P3x" value="{[tube2_length]*TMath::Cos([bend1_angle]*TMath::Pi()/180)+[P2x]}"/>
-  <define name="P3y" value="{[tube2_length]*TMath::Sin([bend1_angle]*TMath::Pi()/180)+[P2y]}"/>
-  <define name="P4x" value="{-[bend2_radii]*TMath::Sin([bend1_angle]*TMath::Pi()/180)+[P3x]}"/>
-  <define name="P4y" value="{[bend2_radii]*TMath::Cos([bend1_angle]*TMath::Pi()/180)+[P3y]}"/>
-  <define name="P5x" value="{[bend2_radii]*TMath::Sin(([bend1_angle]+[bend2_angle])*TMath::Pi()/180)+[P4x]}"/>
-  <define name="P5y" value="{-[bend2_radii]*TMath::Cos(([bend1_angle]+[bend2_angle])*TMath::Pi()/180)+[P4y]}"/>
-  <define name="P6x" value="{[tube3_length]*TMath::Cos(([bend1_angle]+[bend2_angle])*TMath::Pi()/180)+[P5x]}"/>
-  <define name="P6y" value="{[tube3_length]*TMath::Sin(([bend1_angle]+[bend2_angle])*TMath::Pi()/180)+[P5y]}"/>
-  <define name="P7x" value="{[bend3_radii]*TMath::Sin(([bend1_angle]+[bend2_angle])*TMath::Pi()/180)+[P6x]}"/>
-  <define name="P7y" value="{-[bend3_radii]*TMath::Cos(([bend1_angle]+[bend2_angle])*TMath::Pi()/180)+[P6y]}"/>
-  <define name="P8x" value="{[bend3_radii]*TMath::Sin(([bend3_angle]-[bend1_angle]-[bend2_angle])*TMath::Pi()/180)+[P7x]}"/>
-  <define name="P8y" value="{[bend3_radii]*TMath::Cos(([bend3_angle]-[bend1_angle]-[bend2_angle])*TMath::Pi()/180)+[P7y]}"/>
-  <define name="P9x" value="{[tube4_length]*TMath::Cos(([bend3_angle]-[bend1_angle]-[bend2_angle])*TMath::Pi()/180)+[P8x]}"/>
-  <define name="P9y" value="{-[tube4_length]*TMath::Sin(([bend3_angle]-[bend1_angle]-[bend2_angle])*TMath::Pi()/180)+[P8y]}"/>
+  <define name="P3x" value="{[bend2_radii]*TMath::Sin([bend1_angle]*TMath::Pi()/180)+[P2x]}"/>
+  <define name="P3y" value="{-[bend2_radii]*TMath::Cos([bend1_angle]*TMath::Pi()/180)+[P2y]}"/>
+  <define name="P4x" value="{[bend2_radii]*TMath::Sin(([bend2_angle]-[bend1_angle])*TMath::Pi()/180)+[P3x]}"/>
+  <define name="P4y" value="{[bend2_radii]*TMath::Cos(([bend2_angle]-[bend1_angle])*TMath::Pi()/180)+[P3y]}"/>
+  <define name="P5x" value="{[tube2_length]*TMath::Cos(([bend2_angle]-[bend1_angle])*TMath::Pi()/180)+[P4x]}"/>
+  <define name="P5y" value="{-[tube2_length]*TMath::Sin(([bend2_angle]-[bend1_angle])*TMath::Pi()/180)+[P4y]}"/>
 
 
   <!-- World -->
-  <cylinder_space name="world_space" z1="-0.2" z2="1.8" r="2."/>
+  <cylinder_space name="world_space" z1="-0.2" z2="{[height]*1.2}" r="{[length]*1.2}"/>
 
-  <!-- Shell Surface -->
+  <!-- Shell Surface (Bend Part) -->
   <tag name="inner_bend_tag">
     <shell_circle_surface name="inner_shell_circle_1_surface" angle_start="0" angle_stop="[bend1_angle]" shell_mesh_count="32" shell_mesh_power="6">
       <circle x="0." y="[bend1_radii]" radius="{[inner_diameter]/2}" circle_mesh_count="32"/>
@@ -117,12 +103,9 @@ part like in the real world.
     <shell_circle_surface name="inner_shell_circle_2_surface" angle_start="0" angle_stop="[bend2_angle]" shell_mesh_count="32" shell_mesh_power="6">
       <circle x="0." y="[bend2_radii]" radius="{[inner_diameter]/2}" circle_mesh_count="32"/>
     </shell_circle_surface>
-    <shell_circle_surface name="inner_shell_circle_3_surface" angle_start="0" angle_stop="[bend3_angle]" shell_mesh_count="32" shell_mesh_power="6">
-      <circle x="0." y="[bend3_radii]" radius="{[inner_diameter]/2}" circle_mesh_count="32"/>
-    </shell_circle_surface>
   </tag>
 
-  <!-- Cylinder Surface -->
+  <!-- Tube Part -->
   <tag name="cylinder_surface_tag">
     <cylinder_surface
       name="tube1_surface"
@@ -132,33 +115,21 @@ part like in the real world.
     />
     <cylinder_surface
       name="tube2_surface"
-      z1="0."
-      z2="{[tube2_length]-[slit_length]}"
-      r="{[inner_diameter]/2}"
-    />
-    <cylinder_surface
-      name="tube3_surface"
       z1="{0.+[slit_length]}"
-      z2="{[tube3_length]-[slit_length]}"
-      r="{[inner_diameter]/2}"
-    />
-    <cylinder_surface
-      name="tube4_surface"
-      z1="{0.+[slit_length]}"
-      z2="{[tube4_length]-[slit_length]}"
+      z2="{[tube2_length]}"
       r="{[inner_diameter]/2}"
     />
   </tag>
 
   <!-- Cylinder Detector Space -->
   <tag name="cylinder_tag">
-    <cylinder_space name="cylinder_detector_space" r="{[inner_diameter]/2}" z1="0." z2="0.05"/>
+    <cylinder_space name="cylinder_detector_space" r="{[inner_diameter]/2}" z1="0." z2="0.01"/>
   </tag>
 
   <!-- Outer World Space -->
   <tag name="outer_world_tag">
-    <cylinder_space name="cylinder_world_space" r="2." z1="-0.05" z2="0.05"/>
-    <cylinder_tube_space name="cylinder_tube_world_space" z1="-0.1" z2="1.7" r1="1.9" r2="2."/>
+    <cylinder_space name="cylinder_world_space" r="{[length]*1.2}" z1="-0.05" z2="0.05"/>
+    <cylinder_tube_space name="cylinder_tube_world_space" z1="-0.1" z2="{[height]*1.2}" r1="{[length]*1.19}" r2="{[length]*1.2}"/>
   </tag>
 
   <!-- Detector Cover Space -->
@@ -169,8 +140,8 @@ part like in the real world.
 
   <!-- Slit Surface -->
   <tag name="slit_tag">
-    <cylinder_surface name="slit_in_surface" r="{[inner_diameter]/2}" z1="-2.5e-3" z2="0."/>
-    <cylinder_surface name="slit_out_surface" r="{[inner_diameter]/2}" z1="0." z2="2.5e-3"/>
+    <cylinder_surface name="slit_in_surface" r="{[inner_diameter]/2}" z1="{-[slit_length]}" z2="0."/>
+    <cylinder_surface name="slit_out_surface" r="{[inner_diameter]/2}" z1="0." z2="[slit_length]"/>
   </tag>
 
 
@@ -182,12 +153,8 @@ part like in the real world.
                       rotation_euler="-90. 0. 0."/>
     </surface>
     <surface name="bend2" node="inner_shell_circle_2_surface">
-      <transformation displacement="[P4x] [P4y] 0."
-                      rotation_euler="{[bend1_angle]-90.} 0. 0"/>
-    </surface>
-    <surface name="bend3" node="inner_shell_circle_3_surface">
-      <transformation displacement="[P7x] [P7y] 0."
-                      rotation_euler="{[bend1_angle]+[bend2_angle]} 180. -90"/>
+      <transformation displacement="[P3x] [P3y] 0."
+                      rotation_euler="{[bend1_angle]} 180. -90"/>
     </surface>
     <!-- Tube Part -->
     <surface name="tube1" node="tube1_surface">
@@ -195,16 +162,8 @@ part like in the real world.
                       rotation_euler="{90+[bend1_angle]} 90. 0."/>
     </surface>
     <surface name="tube2" node="tube2_surface">
-      <transformation displacement="[P2x] [P2y] 0."
-                      rotation_euler="{90+[bend1_angle]} 90. 0."/>
-    </surface>
-    <surface name="tube3" node="tube3_surface">
-      <transformation displacement="[P5x] [P5y] 0."
-                      rotation_euler="{90+[bend1_angle]+[bend2_angle]} 90. 0."/>
-    </surface>
-    <surface name="tube4" node="tube4_surface">
-      <transformation displacement="[P8x] [P8y] 0."
-                      rotation_euler="{90+[bend1_angle]+[bend2_angle]-[bend3_angle]} 90. 0."/>
+      <transformation displacement="[P4x] [P4y] 0."
+                      rotation_euler="{90+[bend1_angle]-[bend2_angle]} 90. 0."/>
     </surface>
   </space>
 
@@ -218,21 +177,9 @@ part like in the real world.
       <transformation displacement="[P2x] [P2y] 0."
                       rotation_euler="{90+[bend1_angle]} 90. 0."/>
     </surface>
-    <surface name="slit_P3" node="slit_in_surface">
-      <transformation displacement="[P3x] [P3y] 0."
-                      rotation_euler="{90+[bend1_angle]} 90. 0."/>
-    </surface>
-    <surface name="slit_P5" node="slit_out_surface">
-      <transformation displacement="[P5x] [P5y] 0."
-                      rotation_euler="{90+[bend1_angle]+[bend2_angle]} 90. 0."/>
-    </surface>
-    <surface name="slit_P6" node="slit_in_surface">
-      <transformation displacement="[P6x] [P6y] 0."
-                      rotation_euler="{90+[bend1_angle]+[bend2_angle]} 90. 0."/>
-    </surface>
-    <surface name="slit_P8" node="slit_out_surface">
-      <transformation displacement="[P8x] [P8y] 0."
-                      rotation_euler="{90+[bend1_angle]+[bend2_angle]-[bend3_angle]} 90. 0."/>
+    <surface name="slit_P3" node="slit_out_surface">
+      <transformation displacement="[P4x] [P4y] 0."
+                      rotation_euler="{90+[bend1_angle]-[bend2_angle]} 90. 0."/>
     </surface>
   </space>
 
@@ -245,12 +192,12 @@ part like in the real world.
   <!-- Boundary Assembly -->
   <space name="boundary_assembly">
     <space name="exit_cylinder" node="cylinder_detector_space">
-      <transformation displacement="[P9x] [P9y] 0."
-                      rotation_euler="{90+[bend1_angle]+[bend2_angle]-[bend3_angle]} 90. 0."/>
+      <transformation displacement="[P5x] [P5y] 0."
+                      rotation_euler="{90+[bend1_angle]-[bend2_angle]} 90. 0."/>
     </space>
     <space name="detector_cover" tree="detector_cover_assembly">
-      <transformation displacement="[P9x] [P9y] 0."
-                      rotation_euler="{90+[bend1_angle]+[bend2_angle]-[bend3_angle]} 90. 0."/>
+      <transformation displacement="[P5x] [P5y] 0."
+                      rotation_euler="{90+[bend1_angle]-[bend2_angle]} 90. 0."/>
     </space>
     <space name="entry_cylinder" node="cylinder_detector_space">
       <transformation displacement="0. 0. 0."
@@ -264,7 +211,7 @@ part like in the real world.
       <transformation displacement="0. 0. -0.1"/>
     </space>
     <space name="upper_world_cylinder" node="cylinder_world_space">
-      <transformation displacement="0. 0. 1.7"/>
+      <transformation displacement="0. 0. {[height]*1.2}"/>
     </space>
     <space name="lateral_world_cylinder" node="cylinder_tube_world_space"/>
   </space>
@@ -282,6 +229,7 @@ part like in the real world.
     <space name="spectrometer" node="cylinder_detector_space">
       <transformation rotation_euler="90. 90. 0."/>
     </space>
+    <!-- To determine if the neutron escape the beamline -->
     <space name="boundary" tree="boundary_assembly">
       <transformation rotation_euler="0. 90. 0."/>
     </space>
@@ -372,8 +320,9 @@ part like in the real world.
 
 
   <!-- Writers -->
-  <kswrite_root name="write_root" path="[output_path]" base="tSPECT_beamline_slits_[slurmjobID]_[parallelID].root"/>
-  <!--kswrite_vtk name="write_vtk" path="[output_path]" base="beamline_simulation"/-->
+  <kswrite_root name="write_root" path="[output_path]" base="beamline_surface_slits_simulation_triga_test.root"/>
+  <!--kswrite_vtk name="write_vtk" path="[output_path]" base="beamline_surface_simulation_triga_test"/-->
+  <!--kswrite_root_condition_step name="condition_nth_step" group="component_step_world" parent="step_id" nth_step="{100}"/-->
 
 
   <!-- Outputs -->
@@ -475,10 +424,10 @@ part like in the real world.
 
 
   <!-- Simulation -->
-  <ks_simulation
+  <!--ks_simulation
     run="1"
-    seed="[random_seed]"
-    events="1000"
+    seed="51394"
+    events="100"
     space="space_world"
     generator="generator_uniform"
     trajectory="trajectory_exact"
@@ -486,11 +435,11 @@ part like in the real world.
     surface_navigator="nav_surface"
     terminator="term_world"
     writer="write_root"
-  />
+  /-->
 </kassiopeia>
 
 
-<!--vtk_window
+<vtk_window
   name="vtk_window"
   enable_display="true"
   enable_write="true"
@@ -511,7 +460,7 @@ part like in the real world.
     file="beamline_surface_slits_geometry.vtp"
     surfaces="world/beamline/#"
   />
-  <vtk_track_painter
+  <!--vtk_track_painter
     name="track_painter"
     path="[output_path]"
     file="beamline_surface_slits_simulation_triga_test.root"

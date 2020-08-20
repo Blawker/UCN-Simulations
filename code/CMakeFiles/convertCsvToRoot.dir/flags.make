@@ -6,5 +6,5 @@ CXX_FLAGS = -std=c++11 -Wall -Wextra -march=native -O3 -isysroot /Applications/X
 
 CXX_DEFINES = -DNDEBUG
 
-CXX_INCLUDES = -I"/Users/Thomas_Guilbaud/Documents/Stage 2A - UCN - 2020/UCN-Simulations/code/src/include" -I/opt/local/libexec/root6/include/root 
+CXX_INCLUDES = -I/Users/Thomas_Guilbaud/Documents/Stage_2A_-_UCN_-_2020/UCN-Simulations/code/src/include -I/opt/local/libexec/root6/include/root 
 
