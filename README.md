@@ -66,6 +66,9 @@ Fork of the modified Kassiopeia: *https://github.com/Blawker/Kassiopeia*.
   
 - A basic simulation configuration can be found in the fork folder called `PistonSimulation.xml` : https://github.com/Blawker/Kassiopeia/blob/master/Kassiopeia/XML/Examples/PistonSimulation.xml
 
+- The following file gives an example of configuration with two independent moving part (piston + shutter):
+https://github.com/Blawker/UCN-Simulations/blob/master/config/Piston/tSPECT_piston_shutter_TRIGA_auto.xml
+
 ### Bibliography
 [1](1) [I. Altarev et al. Neutron velocity distribution from a superthermal solid 2H2 ultracold neutron source. The European Physical Journal A, 37: 9-14 July 2008.](1)
 
