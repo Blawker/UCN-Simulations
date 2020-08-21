@@ -6,16 +6,16 @@ Fork of the modified Kassiopeia: *https://github.com/Blawker/Kassiopeia*.
 ## First project: Beamline
 - Initialize the geometry of a beamline structure for UCN.
 - Adding surface reflection for stainless steel.
-- Generate initial energy spectrum according to TRIGA neutrons distribution[1](1).
+- Generate initial energy spectrum according to TRIGA neutrons distribution[[1](1)].
 - Adding slits to simulation the junction between the different part that compose the beamline.
 - Adding binary program to create and add output file into Root's histograms.
-- Adding Shell Script to parallelized simulations[2](2).
+- Adding Shell Script to parallelized simulations[[2](2)].
 
 ## Second project: Moving Mirror
 - Initialize the geometry of a piston structure for UCN.
 - Modify the source code of Kassiopeia to implement :
   - Moving part : surfaces, spaces, assemblies.
-  - Interaction of UCN on moving surfaces[3](3).
+  - Interaction of UCN on moving surfaces[[3](3)].
 - To create the motion of a part :
   - Enter the line in a config_file.xml to configure the motion :
   ```xml
@@ -30,7 +30,7 @@ Fork of the modified Kassiopeia: *https://github.com/Blawker/Kassiopeia*.
   ```
   - Add the line below in the `<ksgeo_space />` structure command to link the motion to the simulation. It is recommanded to place the line in the root of the structure often called `space_world`.
   ```xml
-  <command parent="root_surface_motion" field="set_surface_motion" child="motion_surface_translation"/>
+  <command parent="root_surface_motion" field="add_surface_motion" child="motion_surface_translation"/>
   ```
 
   - Then enter a moving interaction component that has the same motion has the surface. Here is an example of interaction of UCN with stainless steel :
