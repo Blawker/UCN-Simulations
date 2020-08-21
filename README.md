@@ -54,7 +54,7 @@ Fork of the modified Kassiopeia: *https://github.com/Blawker/Kassiopeia*.
   </geo_surface>
   ```
 
-  - It is preferable to use `<define />` input because there could be many components that must have the same motion :
+  - It is recommended to use `<define />` input because there could be many components that may have the same motion :
   ```xml
     <!-- Equation of motion is a time-dependent position function -->
   <define name="equation_motion" value="0.05*x"/>
